@@ -3,17 +3,15 @@
 
 import json
 
-#import doc_assistant
+import assistant
 
 
 def main(args):
-    print('hello from main')
-    name = args.get("name", "world")
-    greeting = "Hello " + name + "!"
-    # return {"body": greeting}
-    response = {"body": greeting}
-    # Serializza il dizionario in una stringa JSON
-    return json.dumps(response)
+    print('hello from main')    
+    #return json.dumps(response)
+    return { 
+        "body": assistant.main(args)
+    }
     """
     return { 
         "body": doc_assistant.main(args)

@@ -13,4 +13,8 @@ class Config:
     INAPPROPRIATE = ""
 
 def main(args):
-    print(args)
+    name = args.get("name", "world")
+    greeting = "Hello " + name + "!"
+    # return {"body": greeting}
+    #response = {"body": greeting}
+    return greeting
