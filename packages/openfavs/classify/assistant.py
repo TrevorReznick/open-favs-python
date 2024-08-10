@@ -4,7 +4,7 @@ class Config:
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
     ROLE = """
         You are an data entry analist of this site. You should have to classify a bookmark site
-        after you grab the default information..
+        after you grab the default information.
     """
     EMAIL = "enzonav@yahoo.it"
     THANKS = ""
