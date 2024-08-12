@@ -34,13 +34,20 @@ class ChatBot:
                                api_key=self.key, 
                                azure_endpoint=self.host
                             )
-        return
-
 class Website:
 
-    def __init__(self):
+    def __init__(self, args):
         print('init website()')
-        return
+        
+
+    def test(self, args):
+        url = args.get("url", "none")
+        greeting = "url: " + url + "!"
+        print(greeting)
+        #return {"body": greeting}
+        #response = {"body": greeting}
+        #return greeting  
+        
 
 AI = None
 Web = None
@@ -52,10 +59,11 @@ def main(args):
     print('into main')
 
     if AI is None: AI = ChatBot(args)    
-    if Web is None: Web = Website() 
-
-    name = args.get("name", "world")
-    greeting = "Hello " + name + "!"
+    if Web is None: Web = Website(args)
+    Web.test(args)
+    # test args
+    #url = args.get("url", "none")
+    #greeting = "url: " + url + "!"
     # return {"body": greeting}
     #response = {"body": greeting}
-    return greeting
+    return #greeting
