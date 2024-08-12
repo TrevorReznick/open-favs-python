@@ -44,9 +44,10 @@ class Website:
         url = args.get("url", "none")
         greeting = "url: " + url + "!"
         print(greeting)
+        return greeting
         #return {"body": greeting}
         #response = {"body": greeting}
-        #return greeting  
+        #return greeting
         
 
 AI = None
@@ -60,10 +61,10 @@ def main(args):
 
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
-    Web.test(args)
+    return {"body": Web.test(args)}
     # test args
     #url = args.get("url", "none")
     #greeting = "url: " + url + "!"
     # return {"body": greeting}
     #response = {"body": greeting}
-    return #greeting
+    #return #greeting
