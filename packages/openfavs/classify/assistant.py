@@ -24,7 +24,8 @@ from openai import AzureOpenAI, BadRequestError
 class ChatBot:
 
     def __init__(self, args):
-        print('init chatbot()')
+
+        print('init class chatbot')
         OPENAI_API_KEY = '89773db3-7863-460c-ad3c-6abd0db43f1c'
         OPENAI_API_HOST = 'https://openai.nuvolaris.io'
         print('init chatbot()')        
@@ -34,20 +35,19 @@ class ChatBot:
                                api_key=self.key, 
                                azure_endpoint=self.host
                             )
+        
 class Website:
 
     def __init__(self, args):
-        print('init website()')
+        print('init class website')
         
 
     def test(self, args):
         url = args.get("url", "none")
         greeting = "url: " + url + "!"
-        print(greeting)
+        #print(greeting)
         return greeting
-        #return {"body": greeting}
-        #response = {"body": greeting}
-        #return greeting
+        
         
 
 AI = None
@@ -61,10 +61,5 @@ def main(args):
 
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
+
     return {"body": Web.test(args)}
-    # test args
-    #url = args.get("url", "none")
-    #greeting = "url: " + url + "!"
-    # return {"body": greeting}
-    #response = {"body": greeting}
-    #return #greeting
