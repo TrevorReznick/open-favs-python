@@ -15,7 +15,7 @@ class Config:
 import re, json, os
 import requests
 from openai import AzureOpenAI, BadRequestError
-#from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 #import traceback, random
 #from html_sanitizer import Sanitizer
 #from urllib.parse import urlparse
@@ -39,15 +39,34 @@ class ChatBot:
 class Website:
 
     def __init__(self, args):
-        print('init class website')
-        
+        self.response = ""
+        self.site_info = {}
+        #self.sanitizer = Sanitizer()  
+        print('init class website')    
+    
+    def add_element(self, element, value):
+        # Aggiunge una coppia chiave-valore al dizionario
+        self.site_info[element] = value
+        return self.site_info
+    
+    def get_request(self, args):
+        url = args.get("url")
+        if url:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            # Estrarre il titolo della pagina
+            title = soup.title.string
+            self.add_element('title', title)
+            print("Debug Titolo:", title)
+            return self.site_info
 
-    def test(self, args):
+    """
+        def test(self, args):
         url = args.get("url", "none")
         greeting = "url: " + url + "!"
         #print(greeting)
         return greeting
-        
+    """      
         
 
 AI = None
@@ -62,4 +81,4 @@ def main(args):
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
 
-    return {"body": Web.test(args)}
+    return {"body": Web.get_request(args)}

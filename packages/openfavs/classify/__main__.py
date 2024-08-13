@@ -9,9 +9,7 @@ import assistant
 def main(args):
     print('hello from main')    
     #return json.dumps(response)
-    return { 
-        "body": assistant.main(args)
-    }
+    return assistant.main(args)
     """
     return { 
         "body": doc_assistant.main(args)
