@@ -61,11 +61,28 @@ class Website:
             description = soup.title.description
             self.add_element('title', title)
             self.add_element('description', description)
+            #self.add_element('meta_description' , meta_description)
             print("Debug Titolo:", title)
             print('Debug title_tag: ', title_tag)
-            print('Debug meta_description: ', meta_description)
+            #print('Debug meta_description: ', meta_description)
+            if meta_description:
+                print(meta_description['content'])  # Stampa il contenuto del tag meta description
+                # Estrai il canonical link
+                canonical_link = soup.find('link', attrs={'rel': 'canonical'})
+                if canonical_link:
+                    print(canonical_link['href'])  # Stampa l'URL del canonical link
+                    tag_as_string = str(canonical_link)
+                    json_output = json.dumps({'content': tag_as_string}, ensure_ascii=False)
+                    self.add_element('canonical_link', json_output)
+
+                # Estrai i metadati og:title
+                #og_title = soup.find('meta', attrs={'property': 'og:title'})
+                #if og_title:
+                    #print(og_title['content'])  # Stampa il contenuto del tag og:title
+                    #self.add_element('og_title', og_title)
             print('Debug description: ', description)
             return self.site_info
+        
 
     """
         def test(self, args):
