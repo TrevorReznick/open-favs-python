@@ -56,8 +56,15 @@ class Website:
             soup = BeautifulSoup(response.text, 'html.parser')
             # Estrarre il titolo della pagina
             title = soup.title.string
+            title_tag = soup.find('title')
+            meta_description = soup.find('meta', attrs={"name": "description"})
+            description = soup.title.description
             self.add_element('title', title)
+            self.add_element('description', description)
             print("Debug Titolo:", title)
+            print('Debug title_tag: ', title_tag)
+            print('Debug meta_description: ', meta_description)
+            print('Debug description: ', description)
             return self.site_info
 
     """
