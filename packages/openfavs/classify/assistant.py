@@ -60,13 +60,19 @@ class Website:
         url = args.get("url")
         if url:
             response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')       
-            title = soup.title.string
-            self.add_element('title', title)
+            #soup = BeautifulSoup(response.text, 'html.parser')       
+            #title = soup.title.string
             extractor = get_site_info.MetaDataExtractor(url)
             json_metadata = extractor.to_json()
-            print(json_metadata)
-            return self.site_info
+            metadata_dict = json.loads(json_metadata)
+            #titolo = metadata_dict.get('og:title')
+            #self.add_element('title', titolo)
+            #descrizione = metadata_dict.get('og:description')
+            #self.add_element('description', descrizione)
+            #print(json_metadata)
+            #return self.site_info
+            #return json_metadata
+            return metadata_dict
             """
             title_tag = soup.find('title')
             meta_description = soup.find('meta', attrs={"name": "description"})

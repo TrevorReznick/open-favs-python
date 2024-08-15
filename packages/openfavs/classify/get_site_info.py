@@ -2,6 +2,24 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
+class Config:
+
+    EXCLUDED_WORDS = {
+        "homepage": True,
+        "default": True,
+        "untitled": True,
+        "null": True,
+        "undefined": True,
+        "": True,
+        None: True,
+    }
+
+    @staticmethod
+    def is_excluded(word):
+        if word is None:
+            return True
+        return Config.EXCLUDED_WORDS.get(word.lower().strip(), False)
+
 class MetaDataExtractor:
 
     def __init__(self, url):
@@ -9,7 +27,6 @@ class MetaDataExtractor:
         self.soup = self._fetch_html()
 
     def _fetch_html(self):
-        """Effettua una richiesta all'URL e ritorna il contenuto HTML analizzato da BeautifulSoup."""
         try:
             response = requests.get(self.url)
             response.raise_for_status()  # Verifica che la richiesta abbia avuto successo
@@ -34,7 +51,6 @@ class MetaDataExtractor:
         return None
     
     def get_title(self):
-        """Estrae il titolo della pagina."""
         if not self.soup:
             return None
         title_tag = self.soup.title
@@ -51,17 +67,27 @@ class MetaDataExtractor:
             return canonical_tag['href']
         return None
     
-    def extract_all_metadata(self):
-        """Estrae tutti i metadati rilevanti e li restituisce come dizionario."""
+    def extract_all_metadata(self):        
         if not self.soup:
             return {}
         metadata = {
             'title': self.get_title(),
             'description': self.get_meta_tag(name='description'),
-            'keywords': self.get_meta_tag(name='keywords'),
-            'robots': self.get_meta_tag(name='robots'),
-            'canonical': self.get_canonical_link(),
             'og:title': self.get_meta_tag(property='og:title'),
+            'og:description': self.get_meta_tag(property='og:description'),
+            'og:type': self.get_meta_tag(property='og:type'),
+            'og:url': self.get_meta_tag(property='og:url'),
+        }
+        return {k: v for k, v in metadata.items() if v is not None}
+        """
+        metadata = {
+            'title': self.get_title(),
+            'description': self.get_meta_tag(name='description'),
+            'canonical': self.get_canonical_link(),
+            'keywords': self.get_meta_tag(name='keywords'),
+            'robots': self.get_meta_tag(name='robots'),            
+            'og:title': self.get_meta_tag(property='og:title'),
+            'og:email': self.get_meta_tag(property='og:email'),
             'og:description': self.get_meta_tag(property='og:description'),
             'og:type': self.get_meta_tag(property='og:type'),
             'og:url': self.get_meta_tag(property='og:url'),
@@ -70,11 +96,38 @@ class MetaDataExtractor:
             'twitter:site': self.get_meta_tag(name='twitter:site'),
             'twitter:title': self.get_meta_tag(property='twitter:title'),
         }
-        # Rimuove i metadati che non sono stati trovati (valori None)
-        return {k: v for k, v in metadata.items() if v is not None}
+        """
     
     def to_json(self):
-        """Restituisce i metadati estratti come stringa JSON."""
         metadata = self.extract_all_metadata()
-        return json.dumps(metadata, ensure_ascii=False)
+        filtered_metadata = {}
+
+        for key, value in metadata.items():
+            if Config.is_excluded(value):
+                print(f"Il valore '{value}' per '{key}' è escluso.")
+                continue
+            filtered_metadata[key] = value
+        
+        # Se nessun metadato valido è trovato, usa il contenuto della pagina
+        if not filtered_metadata:
+            page_content = self.soup.get_text() if self.soup else ""
+            filtered_metadata['content'] = page_content.strip()
+
+        return json.dumps(filtered_metadata, ensure_ascii=False)
+    
+    def to_json_old(self):
+
+        metadata = self.extract_all_metadata()
+
+        for key, value in metadata.items():
+            if Config.is_excluded(value):
+                print(f"Il valore '{value}' per '{key}' è escluso.")
+                continue
+            return value
+        
+        # Step 2: Se nessun valore valido è trovato nei metadati, passa a cercare nel contenuto
+        print("Nessun metadato valido trovato, si passa al contenuto della pagina...")
+        #return self.soup.get_text() if self.soup else None#your row
+
+        return json.dumps(metadata, ensure_ascii=False)#my row
 
