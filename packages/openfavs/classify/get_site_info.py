@@ -67,6 +67,34 @@ class MetaDataExtractor:
             return canonical_tag['href']
         return None
     
+    def extract_alternate_title(self):
+        
+        if not self.soup:
+            return None
+        
+        h1_tag = self.soup.find('h1')
+
+        if h1_tag and not Config.is_excluded(h1_tag.get_text()):
+            return h1_tag.get_text().strip()
+        
+        h2_tag = self.soup.find('h2')
+
+        if h2_tag and not Config.is_excluded(h2_tag.get_text()):
+            return h2_tag.get_text().strip()
+        
+        return None
+    
+    def extract_alternate_description(self):
+        """Fallback per la descrizione: cerca il primo paragrafo di testo valido."""
+        if not self.soup:
+            return None
+        paragraphs = self.soup.find_all('p')
+        for p in paragraphs:
+            text = p.get_text().strip()
+            if not Config.is_excluded(text):
+                return text
+        return None
+    
     def extract_all_metadata(self):        
         if not self.soup:
             return {}
@@ -99,6 +127,7 @@ class MetaDataExtractor:
         """
     
     def to_json(self):
+
         metadata = self.extract_all_metadata()
         filtered_metadata = {}
 
@@ -108,10 +137,21 @@ class MetaDataExtractor:
                 continue
             filtered_metadata[key] = value
         
-        # Se nessun metadato valido è trovato, usa il contenuto della pagina
+        # Se nessun metadato valido è trovato, usa fallback nel contenuto della pagina
         if not filtered_metadata:
-            page_content = self.soup.get_text() if self.soup else ""
-            filtered_metadata['content'] = page_content.strip()
+            print("Nessun metadato valido trovato, si passa al fallback...")
+
+            # Fallback per titolo
+            alternate_title = self.extract_alternate_title()
+
+            if alternate_title:
+                filtered_metadata['title'] = alternate_title
+
+            # Fallback per descrizione
+            alternate_description = self.extract_alternate_description()
+
+            if alternate_description:
+                filtered_metadata['description'] = alternate_description
 
         return json.dumps(filtered_metadata, ensure_ascii=False)
     
