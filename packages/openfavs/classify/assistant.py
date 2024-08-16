@@ -1,4 +1,6 @@
 
+#import packages.openfavs.classify.get_site_info_old as get_site_info_old
+
 import get_site_info
 
 class Config:
