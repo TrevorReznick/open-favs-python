@@ -56,25 +56,36 @@ class MetaDataExtractor:
         
         return None
     
-    # @@@ refactoring @@@
-
+    # @@@ refactoring @@@    
+    
+    
     def get_title(self):
-
+        
         if not self.soup:
             return None
-                
+        
         title_tag = self.soup.title
 
-        if title_tag and title_tag.string:
-            return self.format_string(title_tag.string)
+        if title_tag and not Config.is_excluded(title_tag.get_text()):
+            return title_tag.get_text().strip()
         
-        # Se non c'è, cerca manualmente il tag <title> nell'head
-        """
+        h1_tag = self.soup.find('h1')
+
+        if h1_tag and not Config.is_excluded(h1_tag.get_text()):
+            return h1_tag.get_text().strip()
+        
+        h2_tag = self.soup.find('h2')
+
+        if h2_tag and not Config.is_excluded(h2_tag.get_text()):
+            return h2_tag.get_text().strip()
+        
         title_tag = self.soup.find('title')
 
         if title_tag and title_tag.string:
+            print(title_tag)
             return self.format_string(title_tag.string)
-        """
+        
+        return None
     
     def get_canonical_link(self):
 
@@ -88,30 +99,7 @@ class MetaDataExtractor:
         
         return None
     
-    def extract_alternate_title(self):
-        
-        if not self.soup:
-            return None
-        
-        h1_tag = self.soup.find('h1')
-
-        if h1_tag and not Config.is_excluded(h1_tag.get_text()):
-            self.format_string(h1_tag.get_text().strip())
-        
-        h2_tag = self.soup.find('h2')
-
-        if h2_tag and not Config.is_excluded(h2_tag.get_text()):
-            return self.format_string(h2_tag.get_text().strip())
-        
-        # Se non c'è, cerca manualmente il tag <title> nell'head
-        title_tag = self.soup.find('title')
-        if title_tag and title_tag.string:
-            print(title_tag)
-            return self.format_string(title_tag.string)
-        
-        return None
-    
-    def extract_alternate_description(self):
+    def get_description(self):
         
         if not self.soup:
             return None
@@ -140,35 +128,18 @@ class MetaDataExtractor:
         if not self.soup:
             return {}
         metadata = {
-            #'title': self.get_title(),
-            #'description': self.get_meta_tag(name='description'),
+            
             'og:title': self.get_meta_tag(property='og:title'),
             'og:description': self.get_meta_tag(property='og:description'),
             'og:type': self.get_meta_tag(property='og:type'),
             'og:url': self.get_meta_tag(property='og:url'),
-        }
-        #my_title = self.get_title_new()
-        #print(my_title)
-
-        return {k: v for k, v in metadata.items() if v is not None}        
-        """
-        metadata = {
-            'title': self.get_title(),
-            'description': self.get_meta_tag(name='description'),
             'canonical': self.get_canonical_link(),
-            'keywords': self.get_meta_tag(name='keywords'),
-            'robots': self.get_meta_tag(name='robots'),            
-            'og:title': self.get_meta_tag(property='og:title'),
-            'og:email': self.get_meta_tag(property='og:email'),
-            'og:description': self.get_meta_tag(property='og:description'),
-            'og:type': self.get_meta_tag(property='og:type'),
-            'og:url': self.get_meta_tag(property='og:url'),
             'og:site_name': self.get_meta_tag(property='og:site_name'),
-            'twitter:card': self.get_meta_tag(name='twitter:card'),
-            'twitter:site': self.get_meta_tag(name='twitter:site'),
-            'twitter:title': self.get_meta_tag(property='twitter:title'),
+            'keywords': self.get_meta_tag(name='keywords')
+
         }
-        """
+        
+        return {k: v for k, v in metadata.items() if v is not None}         
     
     def to_json(self):
 
@@ -188,13 +159,13 @@ class MetaDataExtractor:
             
             print("Nessun metadato valido trovato, si passa al fallback...")
 
-            alternate_title = self.extract_alternate_title()
+            alternate_title = self.get_title()
 
             if alternate_title:
                 filtered_metadata['title'] = alternate_title
 
             # Fallback per descrizione
-            alternate_description = self.extract_alternate_description()
+            alternate_description = self.get_description()
 
             if alternate_description:
                 filtered_metadata['description'] = self.format_string(alternate_description)
@@ -202,6 +173,23 @@ class MetaDataExtractor:
         return json.dumps(filtered_metadata, ensure_ascii=False)
     
     
-
+"""
+metadata = {
+    'title': self.get_title(),
+    'description': self.get_meta_tag(name='description'),
+    'canonical': self.get_canonical_link(),
+    'keywords': self.get_meta_tag(name='keywords'),
+    'robots': self.get_meta_tag(name='robots'),            
+    'og:title': self.get_meta_tag(property='og:title'),
+    'og:email': self.get_meta_tag(property='og:email'),
+    'og:description': self.get_meta_tag(property='og:description'),
+    'og:type': self.get_meta_tag(property='og:type'),
+    'og:url': self.get_meta_tag(property='og:url'),
+    'og:site_name': self.get_meta_tag(property='og:site_name'),
+    'twitter:card': self.get_meta_tag(name='twitter:card'),
+    'twitter:site': self.get_meta_tag(name='twitter:site'),
+    'twitter:title': self.get_meta_tag(property='twitter:title'),
+}
+"""
 
 
