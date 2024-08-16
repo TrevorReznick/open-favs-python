@@ -7,10 +7,12 @@ class Config:
     EXCLUDED_WORDS = {
         "homepage": True,
         "default": True,
+        "dashboard": True,
         "untitled": True,
         "null": True,
         "undefined": True,
         "index": True,
+        "Benvenuto!": True,
         "": True,
         None: True,
     }
