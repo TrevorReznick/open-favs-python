@@ -1,3 +1,6 @@
+
+import get_site_info
+
 class Config:
     MODEL = "gpt-35-turbo"
     START_PAGE = ""
@@ -21,6 +24,7 @@ from bs4 import BeautifulSoup
 #from urllib.parse import urlparse
 #from difflib import SequenceMatcher
 
+
 class ChatBot:
 
     def __init__(self, args):
@@ -39,27 +43,41 @@ class ChatBot:
 class Website:
 
     def __init__(self, args):
+
         self.response = ""
         self.site_info = {}
         #self.sanitizer = Sanitizer()  
         print('init class website')    
     
     def add_element(self, element, value):
+
         # Aggiunge una coppia chiave-valore al dizionario
         self.site_info[element] = value
         return self.site_info
+    
     
     def get_request(self, args):
         url = args.get("url")
         if url:
             response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            # Estrarre il titolo della pagina
-            title = soup.title.string
+            #soup = BeautifulSoup(response.text, 'html.parser')       
+            #title = soup.title.string
+            extractor = get_site_info.MetaDataExtractor(url)
+            json_metadata = extractor.to_json()
+            metadata_dict = json.loads(json_metadata)
+            #titolo = metadata_dict.get('og:title')
+            #self.add_element('title', titolo)
+            #descrizione = metadata_dict.get('og:description')
+            #self.add_element('description', descrizione)
+            #print(json_metadata)
+            #return self.site_info
+            #return json_metadata
+            return metadata_dict
+            """
             title_tag = soup.find('title')
             meta_description = soup.find('meta', attrs={"name": "description"})
             description = soup.title.description
-            self.add_element('title', title)
+            
             self.add_element('description', description)
             #self.add_element('meta_description' , meta_description)
             print("Debug Titolo:", title)
@@ -83,9 +101,10 @@ class Website:
             print('Debug description: ', description)
             return self.site_info
         
+            """
 
     """
-        def test(self, args):
+    def test(self, args):
         url = args.get("url", "none")
         greeting = "url: " + url + "!"
         #print(greeting)
