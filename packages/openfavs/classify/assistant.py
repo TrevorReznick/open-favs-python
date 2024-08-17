@@ -2,6 +2,7 @@
 #import packages.openfavs.classify.get_site_info_old as get_site_info_old
 
 import get_site_info
+from load_json import main_cat, sub_cat
 
 class Config:
     MODEL = "gpt-35-turbo"
@@ -77,6 +78,10 @@ def main(args):
 
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
+
+    print('test load json')
+    print(main_cat)
+    print(sub_cat)
 
     return {"body": Web.get_request(args)}
 
