@@ -7,7 +7,7 @@ from load_json import main_cat, sub_cat
 class Config:
     MODEL = "gpt-35-turbo"
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
-    ROLE = "You are a generic chat bot assistant"   
+    ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "   
     ERROR = "There was an error processing your request"
     OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming son"
     INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"
