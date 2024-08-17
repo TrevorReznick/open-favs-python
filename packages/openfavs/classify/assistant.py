@@ -1,22 +1,20 @@
 
 #import packages.openfavs.classify.get_site_info_old as get_site_info_old
-
+from openai import AzureOpenAI, BadRequestError
 import get_site_info
 from load_json import main_cat, sub_cat
 
 class Config:
     MODEL = "gpt-35-turbo"
-    START_PAGE = ""
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
-    ROLE = """
-        You are an data entry analist of this site. You should have to classify a bookmark site
-        after you grab the default information.
-    """
-    EMAIL = "enzonav@yahoo.it"
-    THANKS = ""
-    ERROR = ""
-    OUT_OF_SERVICE = ""
-    INAPPROPRIATE = ""
+    ROLE = "You are a generic chat bot assistant"   
+    ERROR = "There was an error processing your request"
+    OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming son"
+    INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"
+    
+    
+    
+
 
 import re, json, os
 import requests
@@ -38,10 +36,34 @@ class ChatBot:
         print('init chatbot()')        
         self.key = OPENAI_API_KEY
         self.host = OPENAI_API_HOST
-        self.ai =  AzureOpenAI(api_version="2023-12-01-preview", 
-                               api_key=self.key, 
-                               azure_endpoint=self.host
-                            )
+        self.ai =  AzureOpenAI(
+            api_version="2023-12-01-preview", 
+            api_key=self.key, 
+            azure_endpoint=self.host
+        )
+
+    def test(self, input, role):
+
+        print('asking chatbot')
+
+        req = [ 
+            {"role": "system", "content": role}, 
+            {"role": "user", "content": input}
+        ]
+
+        try:
+            comp = self.ai.chat.completions.create(model=Config.MODEL, messages=req)
+            if len(comp.choices) > 0:
+                content = comp.choices[0].message.content
+                return content
+            
+        except BadRequestError as e:            
+            return Config.INAPPROPRIATE
+        
+        except Exception as e:
+            return Config.OUT_OF_SERVICE
+        return None
+        
         
 class Website:
 
@@ -65,7 +87,7 @@ class Website:
             extractor = get_site_info.MetaDataExtractor(url)
             json_metadata = extractor.to_json()
             metadata_obj = json.loads(json_metadata)            
-            return metadata_obj       
+            return metadata_obj
 
 AI = None
 Web = None
@@ -80,9 +102,11 @@ def main(args):
     if Web is None: Web = Website(args)
 
     print('test load json')
-    print(main_cat)
-    print(sub_cat)
-
+    #print(main_cat)
+    #print(sub_cat)    
+    request = "If i give you an object,and a content site, you can try to give me 3 tags from the object to classify the site?"
+    chat_gpt = AI.test(request, Config.ROLE)
+    print(chat_gpt)
     return {"body": Web.get_request(args)}
 
 """
