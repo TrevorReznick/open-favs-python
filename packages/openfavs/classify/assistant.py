@@ -61,12 +61,12 @@ class Website:
     def get_request(self, args):
         url = args.get("url")
         if url:
-            response = requests.get(url)
+            #response = requests.get(url)
             #soup = BeautifulSoup(response.text, 'html.parser')       
             #title = soup.title.string
             extractor = get_site_info.MetaDataExtractor(url)
             json_metadata = extractor.to_json()
-            metadata_dict = json.loads(json_metadata)
+            metadata_obj = json.loads(json_metadata)
             #titolo = metadata_dict.get('og:title')
             #self.add_element('title', titolo)
             #descrizione = metadata_dict.get('og:description')
@@ -74,7 +74,7 @@ class Website:
             #print(json_metadata)
             #return self.site_info
             #return json_metadata
-            return metadata_dict
+            return metadata_obj
             """
             title_tag = soup.find('title')
             meta_description = soup.find('meta', attrs={"name": "description"})

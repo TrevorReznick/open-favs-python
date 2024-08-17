@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import json
+import re, json
+from urllib.parse import urlparse
 
 class Config:
 
@@ -12,7 +13,7 @@ class Config:
         "null": True,
         "undefined": True,
         "index": True,
-        "Benvenuto!": True,
+        "Benvenuto": True,
         "": True,
         None: True,
     }
@@ -126,11 +127,14 @@ class MetaDataExtractor:
             print(f"Errore durante la formattazione della stringa: {e}")
             return input_string.strip()
     
-    def extract_all_metadata(self):        
+    def extract_all_metadata(self): 
+
         if not self.soup:
             return {}
+        
         metadata = {
             
+            'og:site_name': self.get_meta_tag(property='og:site_name'),
             'og:title': self.get_meta_tag(property='og:title'),
             'og:description': self.get_meta_tag(property='og:description'),
             'og:type': self.get_meta_tag(property='og:type'),
@@ -144,6 +148,104 @@ class MetaDataExtractor:
         return {k: v for k, v in metadata.items() if v is not None}         
     
     def to_json(self):
+
+        metadata = self.extract_all_metadata()
+
+        filtered_metadata = {
+            'name': None,
+            'title': None,
+            'description': None,
+            'tags': None
+        }
+
+        # Itera sui metadati estratti
+        for key, value in metadata.items():
+            if Config.is_excluded(value):
+                print(f"Il valore '{value}' per '{key}' è escluso.")
+                continue
+
+            # Controlla e assegna i valori
+            if key == 'og:site_name':
+                filtered_metadata['name'] = self.format_string(value)
+            elif key == 'og:title':
+                filtered_metadata['title'] = self.format_string(value)
+            elif key == 'og:description':
+                filtered_metadata['description'] = self.format_string(value)
+            elif key == 'keywords':
+                filtered_metadata['tags'] = value.split(', ')  # Splitta la stringa in una lista di tag
+
+        # Gestisci fallback se i metadati non sono presenti
+        if not filtered_metadata['name']:
+            #url = metadata.get('canonical', '')
+            url = self.url
+            parsed_url = urlparse(url)
+            hostname = parsed_url.hostname
+            if hostname.startswith("www."):
+                hostname = hostname[4:]
+            print(hostname)
+            domain_parts = hostname.split('.')
+            first_part = domain_parts[0].capitalize()
+            filtered_metadata['name'] = first_part
+            
+
+        if not filtered_metadata['title']:
+            alternate_title = self.get_title()
+            filtered_metadata['title'] = alternate_title or 'Fallback Title'
+
+        if not filtered_metadata['description']:
+            alternate_description = self.get_description()
+            filtered_metadata['description'] = self.format_string(alternate_description) if alternate_description else 'Fallback Description'
+
+        if not filtered_metadata['tags']:
+            filtered_metadata['tags'] = []
+
+        return json.dumps(filtered_metadata, ensure_ascii=False)
+    
+    def to_json_new(self):
+        metadata = self.extract_all_metadata()
+
+        filtered_metadata = {}
+
+        # Popola il titolo e la descrizione se disponibili
+        title = metadata.get('og:title')
+        description = metadata.get('og:description')
+        name = metadata.get('og:site_name')
+        tags = metadata.get('keywords')
+
+        # Fallback per 'name' se non è presente
+        if not name:
+            url = metadata.get('canonical', '')
+            # Estrai il valore di fallback per name dall'URL
+            match = re.search(r'https?://(?:www\.)?([^./]+\.[^/]+)', url)
+            print(match)
+            if match:
+                name = match.group(1)
+            else:
+                name = 'default_name'  # Fallback finale se non c'è URL
+
+        # Fallback per title e description se non trovati
+        if not title:
+            title = self.get_title() or 'Fallback Title'
+
+        if not description:
+            description = self.get_description() or 'Fallback Description'
+
+        # Fallback per tags
+        if tags:
+            tags = tags.split(', ')  # Splitta la stringa di keywords in una lista
+        else:
+            tags = []
+
+        # Format the final object
+        final_object = {
+            'name': self.format_string(name),
+            'title': self.format_string(title),
+            'description': self.format_string(description),
+            'tags': tags
+        }
+        return final_object
+    
+    def to_json_old(self):
 
         metadata = self.extract_all_metadata()
 
