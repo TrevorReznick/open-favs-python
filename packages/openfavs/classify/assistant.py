@@ -61,58 +61,10 @@ class Website:
     def get_request(self, args):
         url = args.get("url")
         if url:
-            #response = requests.get(url)
-            #soup = BeautifulSoup(response.text, 'html.parser')       
-            #title = soup.title.string
             extractor = get_site_info.MetaDataExtractor(url)
             json_metadata = extractor.to_json()
-            metadata_obj = json.loads(json_metadata)
-            #titolo = metadata_dict.get('og:title')
-            #self.add_element('title', titolo)
-            #descrizione = metadata_dict.get('og:description')
-            #self.add_element('description', descrizione)
-            #print(json_metadata)
-            #return self.site_info
-            #return json_metadata
-            return metadata_obj
-            """
-            title_tag = soup.find('title')
-            meta_description = soup.find('meta', attrs={"name": "description"})
-            description = soup.title.description
-            
-            self.add_element('description', description)
-            #self.add_element('meta_description' , meta_description)
-            print("Debug Titolo:", title)
-            print('Debug title_tag: ', title_tag)
-            #print('Debug meta_description: ', meta_description)
-            if meta_description:
-                print(meta_description['content'])  # Stampa il contenuto del tag meta description
-                # Estrai il canonical link
-                canonical_link = soup.find('link', attrs={'rel': 'canonical'})
-                if canonical_link:
-                    print(canonical_link['href'])  # Stampa l'URL del canonical link
-                    tag_as_string = str(canonical_link)
-                    json_output = json.dumps({'content': tag_as_string}, ensure_ascii=False)
-                    self.add_element('canonical_link', json_output)
-
-                # Estrai i metadati og:title
-                #og_title = soup.find('meta', attrs={'property': 'og:title'})
-                #if og_title:
-                    #print(og_title['content'])  # Stampa il contenuto del tag og:title
-                    #self.add_element('og_title', og_title)
-            print('Debug description: ', description)
-            return self.site_info
-        
-            """
-
-    """
-    def test(self, args):
-        url = args.get("url", "none")
-        greeting = "url: " + url + "!"
-        #print(greeting)
-        return greeting
-    """      
-        
+            metadata_obj = json.loads(json_metadata)            
+            return metadata_obj       
 
 AI = None
 Web = None
@@ -127,3 +79,32 @@ def main(args):
     if Web is None: Web = Website(args)
 
     return {"body": Web.get_request(args)}
+
+"""
+title_tag = soup.find('title')
+meta_description = soup.find('meta', attrs={"name": "description"})
+description = soup.title.description
+self.add_element('description', description)
+#self.add_element('meta_description' , meta_description)
+print("Debug Titolo:", title)
+print('Debug title_tag: ', title_tag)
+#print('Debug meta_description: ', meta_description)
+if meta_description:
+    print(meta_description['content'])  # Stampa il contenuto del tag meta description
+    # Estrai il canonical link
+    canonical_link = soup.find('link', attrs={'rel': 'canonical'})
+    if canonical_link:
+        print(canonical_link['href'])  # Stampa l'URL del canonical link
+        tag_as_string = str(canonical_link)
+        json_output = json.dumps({'content': tag_as_string}, ensure_ascii=False)
+        self.add_element('canonical_link', json_output)
+    # Estrai i metadati og:title
+    #og_title = soup.find('meta', attrs={'property': 'og:title'})
+    #if og_title:
+    #print(og_title['content'])  # Stampa il contenuto del tag og:title
+    #self.add_element('og_title', og_title)
+    print('Debug description: ', description)
+    return self.site_info
+"""
+
+     
