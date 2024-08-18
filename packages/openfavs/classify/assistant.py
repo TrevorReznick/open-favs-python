@@ -29,8 +29,7 @@ class ChatBot:
 
         print('init class chatbot')
         OPENAI_API_KEY = '89773db3-7863-460c-ad3c-6abd0db43f1c'
-        OPENAI_API_HOST = 'https://openai.nuvolaris.io'
-        print('init chatbot()')        
+        OPENAI_API_HOST = 'https://openai.nuvolaris.io'      
         self.key = OPENAI_API_KEY
         self.host = OPENAI_API_HOST
         self.ai =  AzureOpenAI(
@@ -42,8 +41,8 @@ class ChatBot:
     def test(self, input, role):
 
         print('asking chatbot')
-        print('input', input)
-        print('role', role)
+        #print('input', input)
+        #print('role', role)
 
         req = [ 
             {"role": "system", "content": role}, 
@@ -54,7 +53,7 @@ class ChatBot:
             comp = self.ai.chat.completions.create(model=Config.MODEL, messages=req)
             if len(comp.choices) > 0:
                 content = comp.choices[0].message.content
-                print('debug chatbot')
+                #print('debug chatbot')
                 return content
             
         except BadRequestError as e:            
@@ -112,7 +111,7 @@ def main(args):
     sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])    
     url = args.get("url")
     #print('debug:', sub_cat)
-    print('debug', url)    
+    #print('debug', url)    
     extractor = get_site_info.MetaDataExtractor(url)
     html_content = extractor.get_html_content()
     #print(html_content)
