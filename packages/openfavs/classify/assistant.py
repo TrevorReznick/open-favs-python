@@ -7,7 +7,8 @@ from load_json import main_cat, sub_cat
 class Config:
     MODEL = "gpt-35-turbo"
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
-    ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "   
+    #ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "
+    ROLE = "You are the Openfavs virtual assistant, your role is web site analyst, classifind the input data"   
     ERROR = "There was an error processing your request"
     OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming son"
     INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"
@@ -45,6 +46,8 @@ class ChatBot:
     def test(self, input, role):
 
         print('asking chatbot')
+        print('input', input)
+        print('role', role)
 
         req = [ 
             {"role": "system", "content": role}, 
@@ -55,6 +58,7 @@ class ChatBot:
             comp = self.ai.chat.completions.create(model=Config.MODEL, messages=req)
             if len(comp.choices) > 0:
                 content = comp.choices[0].message.content
+                print('debug chatbot')
                 return content
             
         except BadRequestError as e:            
@@ -80,7 +84,13 @@ class Website:
         self.site_info[element] = value
         return self.site_info
     
-    
+    def get_html_content(self, args):
+
+        url = args.get("url")
+        extractor = get_site_info.MetaDataExtractor(url)
+        html_content = extractor.get_html_content(args)
+        return html_content
+
     def get_request(self, args):
         url = args.get("url")
         if url:
@@ -101,10 +111,21 @@ def main(args):
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
 
-    print('test load json')
-    #print(main_cat)
-    #print(sub_cat)    
-    request = "If i give you an object,and a content site, you can try to give me 3 tags from the object to classify the site?"
+    #print('test load json')
+    main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
+    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])    
+    url = args.get("url")
+    #print('debug:', sub_cat)
+    print('debug', url)    
+    extractor = get_site_info.MetaDataExtractor(url)
+    html_content = extractor.get_html_content()
+    #print(html_content)
+    #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
+    request = f"""
+        There are 2 objects, main category: {main_cat_str} and sub category: {sub_cat_str}, and a site content: {html_content}; 
+        can you give me 1 main category tag and 3 sub category tags, from provided strings reading the site content provided?
+    """
+    #print('prompt', request)
     chat_gpt = AI.test(request, Config.ROLE)
     print(chat_gpt)
     return {"body": Web.get_request(args)}

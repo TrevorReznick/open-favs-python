@@ -36,6 +36,7 @@ class MetaDataExtractor:
             response = requests.get(self.url)
             response.raise_for_status()  # Verifica che la richiesta abbia avuto successo
             return BeautifulSoup(response.text, 'html.parser')
+        
         except requests.exceptions.RequestException as e:
             print(f"Errore durante la richiesta HTTP: {e}")
             return None
@@ -60,7 +61,6 @@ class MetaDataExtractor:
         return None
     
     # @@@ refactoring @@@    
-    
     
     def get_title(self):
         
@@ -127,6 +127,24 @@ class MetaDataExtractor:
             print(f"Errore durante la formattazione della stringa: {e}")
             return input_string.strip()
     
+    def get_html_content(self):
+
+        if not self.soup:
+            return None
+            
+        paragraphs = self.soup.find_all('p')
+        all_text = []
+        
+        for p in paragraphs:
+            text = p.get_text().strip()
+            all_text.append(text)
+        
+        if not all_text:
+            print("Nessun testo trovato nei paragrafi.")
+            return None
+        # Restituisce una singola stringa che unisce tutti i paragrafi con una nuova linea tra di essi
+        return "\n\n".join(all_text)
+    
     def extract_all_metadata(self): 
 
         if not self.soup:
@@ -182,6 +200,7 @@ class MetaDataExtractor:
             hostname = parsed_url.hostname
             if hostname.startswith("www."):
                 hostname = hostname[4:]
+            
             print(hostname)
             domain_parts = hostname.split('.')
             first_part = domain_parts[0].capitalize()
