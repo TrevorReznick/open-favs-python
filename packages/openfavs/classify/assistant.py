@@ -5,16 +5,13 @@ import get_site_info
 from load_json import main_cat, sub_cat
 
 class Config:
-    MODEL = "gpt-35-turbo"
+    MODEL = "gpt-4"
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
     #ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "
-    ROLE = "You are the Openfavs virtual assistant, your role is web site analyst, classifind the input data"   
+    ROLE = "You are the Openfavs virtual assistant, your role is web site analyst, classifyng the input data"   
     ERROR = "There was an error processing your request"
-    OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming son"
-    INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"
-    
-    
-    
+    OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming soon"
+    INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"    
 
 
 import re, json, os
@@ -25,7 +22,6 @@ from bs4 import BeautifulSoup
 #from html_sanitizer import Sanitizer
 #from urllib.parse import urlparse
 #from difflib import SequenceMatcher
-
 
 class ChatBot:
 
@@ -109,7 +105,7 @@ def main(args):
     print('into main')
 
     if AI is None: AI = ChatBot(args)    
-    if Web is None: Web = Website(args)
+    if Web is None: Web = Website(args)    
 
     #print('test load json')
     main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])

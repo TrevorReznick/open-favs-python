@@ -131,6 +131,9 @@ class MetaDataExtractor:
 
         if not self.soup:
             return None
+
+        for element in self.soup(['nav', 'footer', 'header']):
+            element.decompose()
             
         paragraphs = self.soup.find_all('p')
         all_text = []
