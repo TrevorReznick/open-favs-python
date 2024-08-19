@@ -19,6 +19,7 @@ class Config:
     }
 
     @staticmethod
+
     def is_excluded(word):
         if word is None:
             return True
@@ -30,6 +31,7 @@ class MetaDataExtractor:
 
         self.url = url
         self.soup = self._fetch_html(url)
+        print('debug 1: ', self.url)
 
     def _fetch_html(self, url):
 

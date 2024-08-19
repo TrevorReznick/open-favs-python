@@ -1,7 +1,7 @@
 
 #import packages.openfavs.classify.get_site_info_old as get_site_info_old
 from openai import AzureOpenAI, BadRequestError
-import get_site_info
+import get_site_info, web_control
 from load_json import main_cat, sub_cat
 from utils import find_partial_matches
 
@@ -72,13 +72,22 @@ class Website:
 
         self.response = ""
         self.site_info = {}
+        print('debug assistant', args)
         #self.sanitizer = Sanitizer()  
         #print('init class website')    
     
 
     def get_request(self, args):
-        url = args.get("url")
+
+        url = args.get("url")  
+
         if url:
+            url_control = web_control.WebControl(url)
+            print(url_control.get_url_info())
+            if(url_control.is_valid_url()):
+                print('url corretto!')
+            else:
+                print('errore url')
             extractor = get_site_info.MetaDataExtractor(url)
             json_metadata = extractor.to_json()
             metadata_obj = json.loads(json_metadata)            
@@ -92,14 +101,19 @@ def main(args):
     global AI, Web
 
     print('into main')
-
+    
     if AI is None: AI = ChatBot(args)    
-    if Web is None: Web = Website(args)    
+    if Web is None: Web = Website(args)
 
-    #print('test load json')
-    main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
-    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])    
+    #debug function
     url = args.get("url")
+    url_info = web_control.WebControl(url)
+    #print(url_info.get_info())
+
+    main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
+    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat]) 
+    url = args.get("url")
+    print('debug 0: ', url)
     #print('debug:', sub_cat)
     #print('debug', url)    
     extractor = get_site_info.MetaDataExtractor(url)
