@@ -3,12 +3,14 @@
 from openai import AzureOpenAI, BadRequestError
 import get_site_info
 from load_json import main_cat, sub_cat
+from utils import find_partial_matches
 
 class Config:
     MODEL = "gpt-4"
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
     #ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "
     ROLE = "You are the Openfavs virtual assistant, your role is web site analyst, classifyng the input data"   
+    GEMERIC_ROLE = "You are a generic GPT-4 assistant, provide kindly answers to user's questions"
     ERROR = "There was an error processing your request"
     OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming soon"
     INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"    
@@ -27,7 +29,7 @@ class ChatBot:
 
     def __init__(self, args):
 
-        print('init class chatbot')
+        #print('init class chatbot')
         OPENAI_API_KEY = '89773db3-7863-460c-ad3c-6abd0db43f1c'
         OPENAI_API_HOST = 'https://openai.nuvolaris.io'      
         self.key = OPENAI_API_KEY
@@ -38,7 +40,7 @@ class ChatBot:
             azure_endpoint=self.host
         )
 
-    def test(self, input, role):
+    def asks_ai(self, input, role):
 
         print('asking chatbot')
         #print('input', input)
@@ -71,20 +73,8 @@ class Website:
         self.response = ""
         self.site_info = {}
         #self.sanitizer = Sanitizer()  
-        print('init class website')    
+        #print('init class website')    
     
-    def add_element(self, element, value):
-
-        # Aggiunge una coppia chiave-valore al dizionario
-        self.site_info[element] = value
-        return self.site_info
-    
-    def get_html_content(self, args):
-
-        url = args.get("url")
-        extractor = get_site_info.MetaDataExtractor(url)
-        html_content = extractor.get_html_content(args)
-        return html_content
 
     def get_request(self, args):
         url = args.get("url")
@@ -117,15 +107,24 @@ def main(args):
     #print(html_content)
     #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
     request = f"""
-        There are 2 objects, main category: {main_cat_str} and sub category: {sub_cat_str}, and a site content: {html_content}; 
-        can you give me 1 main category tag and 3 sub category tags, from provided strings reading the site content provided?
+        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, and a site content: {html_content}; 
+        can you give me 1 main category tag and 3 sub category tags, from provided strings reading the site content provided? I please you
+        to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; last part is optional, parsed as a string?
     """
     #print('prompt', request)
-    chat_gpt = AI.test(request, Config.ROLE)
-    print(chat_gpt)
+    classify = AI.asks_ai(request, Config.ROLE)
+    print(classify)
+    request_1 = "Oh, you are so precious; could you provide from the strict answer a json object with the object = main_cat main_cat: your_main_cat_tag_answer, sub_cat_tag_1: your_sub_cat_tag_answer_1, ..."
+    re_classify = AI.asks_ai(request_1, Config.ROLE)
+    print(re_classify)
     return {"body": Web.get_request(args)}
 
 """
+def add_element(self, element, value):
+    # Aggiunge una coppia chiave-valore al dizionario
+    self.site_info[element] = value
+    return self.site_info
+
 title_tag = soup.find('title')
 meta_description = soup.find('meta', attrs={"name": "description"})
 description = soup.title.description

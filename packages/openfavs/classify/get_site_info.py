@@ -27,13 +27,16 @@ class Config:
 class MetaDataExtractor:
 
     def __init__(self, url):
-        self.url = url
-        self.soup = self._fetch_html()
 
-    def _fetch_html(self):
+        self.url = url
+        self.soup = self._fetch_html(url)
+
+    def _fetch_html(self, url):
+
+        print('debug url: ', url)
 
         try:
-            response = requests.get(self.url)
+            response = requests.get(url)
             response.raise_for_status()  # Verifica che la richiesta abbia avuto successo
             return BeautifulSoup(response.text, 'html.parser')
         
@@ -143,8 +146,10 @@ class MetaDataExtractor:
             all_text.append(text)
         
         if not all_text:
+
             print("Nessun testo trovato nei paragrafi.")
             return None
+        
         # Restituisce una singola stringa che unisce tutti i paragrafi con una nuova linea tra di essi
         return "\n\n".join(all_text)
     
@@ -171,6 +176,7 @@ class MetaDataExtractor:
     def to_json(self):
 
         metadata = self.extract_all_metadata()
+        content = self.get_html_content()
 
         filtered_metadata = {
             'name': None,
@@ -216,17 +222,13 @@ class MetaDataExtractor:
 
         if not filtered_metadata['description']:
             alternate_description = self.get_description()
-            data = self.get_html_content
             print('alternate text')
             filtered_metadata['description'] = self.format_string(alternate_description) if alternate_description else 'Fallback Description'
 
         if not filtered_metadata['tags']:
             filtered_metadata['tags'] = []
 
-        return json.dumps(filtered_metadata, ensure_ascii=False)
-    
-    
-    
+        return json.dumps(filtered_metadata, ensure_ascii=False)    
     
 """
 metadata = {

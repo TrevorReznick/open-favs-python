@@ -7,7 +7,7 @@ import assistant
 
 
 def main(args):
-    print('hello from main')    
+    #print('hello from main')    
     #return json.dumps(response)
     return assistant.main(args)
     """
