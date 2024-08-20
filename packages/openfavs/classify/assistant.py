@@ -98,29 +98,27 @@ def main(args):
     
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
-
     
     url = args.get("url")
+    print('init MetaDataExtractor class')
     extractor = get_site_info.MetaDataExtractor(url)
 
     main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
-    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat]) 
-    
-    #debug functionurl_control = web_control.WebControl(url)    
-    #url_info = web_control.WebControl(url)
-    #print(url_info.get_info())
-    #print('debug 0: ', url)
-    #print('debug:', sub_cat)
-    #print('debug', url)   
-     
+    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])     
     
     html_content = extractor.get_html_content()
+
+    # qui viene seguito controllo se la pagina è accessibile o meno
+
     if(html_content):
         print('html content found!')
+
     else:
         url_utils = web_control.WebControl(url)
-        url_utils.get_url_info()
-        print('html content not found!')
+        url_logs = url_utils.get_url_info()
+        print('html content not found; ', url_logs)
+        print('debug html content found: ', url_utils.get_html_content())
+        print('debug soup results: ', extractor.get_html_content())
     #print(html_content)
     #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
     request = f"""
