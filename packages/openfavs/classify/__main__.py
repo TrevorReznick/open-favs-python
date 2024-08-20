@@ -13,10 +13,11 @@ def main(args):
     #return json.dumps(response)
 
     url = args.get('url')
+    
     if(url):
         url_control = web_control.WebControl(url)
         #print(url_control.get_url_info())
-        if(url_control.is_valid_url()):
+        if(url_control.validate_url()):
             print('url corretto!')
             #print('main url arg', url)
             return assistant.main(args)

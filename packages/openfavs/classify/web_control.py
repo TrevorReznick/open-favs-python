@@ -79,12 +79,13 @@ class WebControl:
         }
         return results
     
-    def get_url_info(self):
+    def validate_url(self):
         # Esegui tutti i controlli e restituisci i risultati
         if self.is_valid_url():
             return self.url
         else:
-            return "Invalid URL"
+            print("Invalid URL")
+            return None
 
 """
     Esempio di utilizzo

@@ -31,11 +31,9 @@ class MetaDataExtractor:
 
         self.url = url
         self.soup = self._fetch_html(url)
-        print('debug 1: ', self.url)
+        #print('debug 1: ', self.url)
 
     def _fetch_html(self, url):
-
-        print('debug url: ', url)
 
         try:
             response = requests.get(url)
@@ -67,74 +65,11 @@ class MetaDataExtractor:
     
     # @@@ refactoring @@@    
     
-    def get_title(self):
-        
-        if not self.soup:
-            return None
-        
-        title_tag = self.soup.title
-
-        if title_tag and not Config.is_excluded(title_tag.get_text()):
-            return title_tag.get_text().strip()
-        
-        h1_tag = self.soup.find('h1')
-
-        if h1_tag and not Config.is_excluded(h1_tag.get_text()):
-            return h1_tag.get_text().strip()
-        
-        h2_tag = self.soup.find('h2')
-
-        if h2_tag and not Config.is_excluded(h2_tag.get_text()):
-            return h2_tag.get_text().strip()
-        
-        title_tag = self.soup.find('title')
-
-        if title_tag and title_tag.string:
-            #print(title_tag)
-            return self.format_string(title_tag.string)
-        
-        return None
-    
-    def get_canonical_link(self):
-
-        if not self.soup:
-            return None
-        
-        canonical_tag = self.soup.find('link', attrs={'rel': 'canonical'})
-
-        if canonical_tag and 'href' in canonical_tag.attrs:
-            return canonical_tag['href']
-        
-        return None
-    
-    def get_description(self):
-        
-        if not self.soup:
-            return None
-        
-        paragraphs = self.soup.find_all('p')
-
-        for p in paragraphs:
-            text = p.get_text().strip()
-            if not Config.is_excluded(text):
-                return self.format_string(text)
-            
-        return None
-    
-    def format_string(self, input_string):
-        
-        if input_string is None:
-            return None
-        try:
-            # Rimuove eventuali spazi vuoti indesiderati
-            return input_string.strip()
-        except AttributeError as e:
-            print(f"Errore durante la formattazione della stringa: {e}")
-            return input_string.strip()
     
     def get_html_content(self):
 
         if not self.soup:
+            print('debug, self soup: ', None)
             return None
 
         for element in self.soup(['nav', 'footer', 'header']):
@@ -230,7 +165,72 @@ class MetaDataExtractor:
         if not filtered_metadata['tags']:
             filtered_metadata['tags'] = []
 
-        return json.dumps(filtered_metadata, ensure_ascii=False)    
+        return json.dumps(filtered_metadata, ensure_ascii=False)
+    
+    def get_title(self):
+        
+        if not self.soup:
+            return None
+        
+        title_tag = self.soup.title
+
+        if title_tag and not Config.is_excluded(title_tag.get_text()):
+            return title_tag.get_text().strip()
+        
+        h1_tag = self.soup.find('h1')
+
+        if h1_tag and not Config.is_excluded(h1_tag.get_text()):
+            return h1_tag.get_text().strip()
+        
+        h2_tag = self.soup.find('h2')
+
+        if h2_tag and not Config.is_excluded(h2_tag.get_text()):
+            return h2_tag.get_text().strip()
+        
+        title_tag = self.soup.find('title')
+
+        if title_tag and title_tag.string:
+            #print(title_tag)
+            return self.format_string(title_tag.string)
+        
+        return None
+    
+    def get_canonical_link(self):
+
+        if not self.soup:
+            return None
+        
+        canonical_tag = self.soup.find('link', attrs={'rel': 'canonical'})
+
+        if canonical_tag and 'href' in canonical_tag.attrs:
+            return canonical_tag['href']
+        
+        return None
+    
+    def get_description(self):
+        
+        if not self.soup:
+            return None
+        
+        paragraphs = self.soup.find_all('p')
+
+        for p in paragraphs:
+            text = p.get_text().strip()
+            if not Config.is_excluded(text):
+                return self.format_string(text)
+            
+        return None
+    
+    def format_string(self, input_string):
+        
+        if input_string is None:
+            return None
+        try:
+            # Rimuove eventuali spazi vuoti indesiderati
+            return input_string.strip()
+        except AttributeError as e:
+            print(f"Errore durante la formattazione della stringa: {e}")
+            return input_string.strip()
     
 """
 metadata = {

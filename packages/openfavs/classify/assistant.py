@@ -72,26 +72,20 @@ class Website:
 
         self.response = ""
         self.site_info = {}
-        print('debug assistant', args)
+        self.url = args.get("url")  
+        #print('debug assistant', args)
         #self.sanitizer = Sanitizer()  
         #print('init class website')    
     
 
-    def get_request(self, args):
+    def get_request(self, args):        
 
-        url = args.get("url")  
-
-        if url:
-            url_control = web_control.WebControl(url)
-            print(url_control.get_url_info())
-            if(url_control.is_valid_url()):
-                print('url corretto!')
-            else:
-                print('errore url')
-            extractor = get_site_info.MetaDataExtractor(url)
-            json_metadata = extractor.to_json()
-            metadata_obj = json.loads(json_metadata)            
-            return metadata_obj
+        #url_control = web_control.WebControl(self, args)
+        #print(url_control.get_url_info())
+        extractor = get_site_info.MetaDataExtractor(self.url)
+        json_metadata = extractor.to_json()
+        metadata_obj = json.loads(json_metadata)            
+        return metadata_obj
 
 AI = None
 Web = None
@@ -105,19 +99,28 @@ def main(args):
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
 
-    #debug function
+    
     url = args.get("url")
-    url_info = web_control.WebControl(url)
-    #print(url_info.get_info())
+    extractor = get_site_info.MetaDataExtractor(url)
 
     main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
     sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat]) 
-    url = args.get("url")
-    print('debug 0: ', url)
+    
+    #debug functionurl_control = web_control.WebControl(url)    
+    #url_info = web_control.WebControl(url)
+    #print(url_info.get_info())
+    #print('debug 0: ', url)
     #print('debug:', sub_cat)
-    #print('debug', url)    
-    extractor = get_site_info.MetaDataExtractor(url)
+    #print('debug', url)   
+     
+    
     html_content = extractor.get_html_content()
+    if(html_content):
+        print('html content found!')
+    else:
+        url_utils = web_control.WebControl(url)
+        url_utils.get_url_info()
+        print('html content not found!')
     #print(html_content)
     #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
     request = f"""
@@ -131,7 +134,9 @@ def main(args):
     request_1 = "Oh, you are so precious; could you provide from the strict answer a json object with the object = main_cat main_cat: your_main_cat_tag_answer, sub_cat_tag_1: your_sub_cat_tag_answer_1, ..."
     re_classify = AI.asks_ai(request_1, Config.ROLE)
     print(re_classify)
-    return {"body": Web.get_request(args)}
+    return {
+        "body": Web.get_request(args)
+    }
 
 """
 def add_element(self, element, value):
