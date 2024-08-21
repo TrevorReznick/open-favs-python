@@ -43,28 +43,25 @@ class MetaDataExtractor:
         except requests.exceptions.RequestException as e:
             print(f"Errore durante la richiesta HTTP: {e}")
             return None
-        
-    def get_meta_tag(self, name=None, property=None):
+    def extract_all_metadata(self): 
 
         if not self.soup:
-            return None
+            return {}
         
-        if name:
-            tag = self.soup.find('meta', attrs={'name': name})
+        metadata = {
+            
+            'og:site_name': self.get_meta_tag(property='og:site_name'),
+            'og:title': self.get_meta_tag(property='og:title'),
+            'og:description': self.get_meta_tag(property='og:description'),
+            'og:type': self.get_meta_tag(property='og:type'),
+            'og:url': self.get_meta_tag(property='og:url'),
+            'canonical': self.get_canonical_link(),
+            'og:site_name': self.get_meta_tag(property='og:site_name'),
+            'keywords': self.get_meta_tag(name='keywords')
 
-        elif property:
-            tag = self.soup.find('meta', attrs={'property': property})
-
-        else:
-            return None
-
-        if tag and 'content' in tag.attrs:
-            return tag['content']
+        }
         
-        return None
-    
-    # @@@ refactoring @@@    
-    
+        return {k: v for k, v in metadata.items() if v is not None}
     
     def get_html_content(self):
 
@@ -88,27 +85,39 @@ class MetaDataExtractor:
             return None
         
         # Restituisce una singola stringa che unisce tutti i paragrafi con una nuova linea tra di essi
-        return "\n\n".join(all_text)
+        return "\n\n".join(all_text)   
     
-    def extract_all_metadata(self): 
+    def get_meta_tag(self, name=None, property=None):
 
         if not self.soup:
-            return {}
+            return None
         
-        metadata = {
-            
-            'og:site_name': self.get_meta_tag(property='og:site_name'),
-            'og:title': self.get_meta_tag(property='og:title'),
-            'og:description': self.get_meta_tag(property='og:description'),
-            'og:type': self.get_meta_tag(property='og:type'),
-            'og:url': self.get_meta_tag(property='og:url'),
-            'canonical': self.get_canonical_link(),
-            'og:site_name': self.get_meta_tag(property='og:site_name'),
-            'keywords': self.get_meta_tag(name='keywords')
+        if name:
+            tag = self.soup.find('meta', attrs={'name': name})
 
-        }
+        elif property:
+            tag = self.soup.find('meta', attrs={'property': property})
+
+        else:
+            return None
+
+        if tag and 'content' in tag.attrs:
+            return tag['content']
         
-        return {k: v for k, v in metadata.items() if v is not None}         
+        return None
+    
+    def get_name_by_host(self):
+        url = self.url
+        parsed_url = urlparse(url)
+        hostname = parsed_url.hostname
+        if hostname.startswith("www."):
+            hostname = hostname[4:]            
+            #print(hostname)
+            domain_parts = hostname.split('.')
+            return domain_parts[0].capitalize()
+    
+    # @@@ return object  @@@        
+           
     
     def to_json(self):
 
@@ -141,17 +150,7 @@ class MetaDataExtractor:
         # Gestisci fallback se i metadati non sono presenti
         if not filtered_metadata['name']:
             #url = metadata.get('canonical', '')
-            url = self.url
-            parsed_url = urlparse(url)
-            hostname = parsed_url.hostname
-            if hostname.startswith("www."):
-                hostname = hostname[4:]
-            
-            #print(hostname)
-            domain_parts = hostname.split('.')
-            first_part = domain_parts[0].capitalize()
-            filtered_metadata['name'] = first_part
-            
+            filtered_metadata['name'] = self.get_name_by_host()            
 
         if not filtered_metadata['title']:
             alternate_title = self.get_title()

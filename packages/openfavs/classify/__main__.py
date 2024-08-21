@@ -19,7 +19,7 @@ def main(args):
         #print(url_control.get_url_info())
         if(url_control.validate_url()):
             print('url corretto!')
-            #print('main url arg', url)
+            print('debug main url', url)
             return assistant.main(args)
     else:
         print('errore url')

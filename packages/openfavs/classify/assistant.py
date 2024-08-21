@@ -79,10 +79,10 @@ class Website:
     
 
     def get_request(self, args):        
-
+        self.url = args.get("url")  
         #url_control = web_control.WebControl(self, args)
         #print(url_control.get_url_info())
-        extractor = get_site_info.MetaDataExtractor(self.url)
+        extractor = get_site_info.MetaDataExtractor(args.get("url"))
         json_metadata = extractor.to_json()
         metadata_obj = json.loads(json_metadata)            
         return metadata_obj
@@ -107,6 +107,7 @@ def main(args):
     sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])     
     
     html_content = extractor.get_html_content()
+    description = extractor.get_description()
 
     # qui viene seguito controllo se la pagina è accessibile o meno
 
@@ -122,15 +123,15 @@ def main(args):
     #print(html_content)
     #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
     request = f"""
-        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, and a site content: {html_content}; 
-        can you give me 1 main category tag and 3 sub category tags, from provided strings reading the site content provided? I please you
-        to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; last part is optional, parsed as a string?
+        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, a description {description} and a site content: {html_content}; 
+        can you give me 1 main category tag and 5 sub category tags, from provided strings and the he description; if description has not suitable inormations, you will consider the whole site content provided? I please you
+        to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; last part is optional?
     """
     #print('prompt', request)
     classify = AI.asks_ai(request, Config.ROLE)
     print(classify)
     request_1 = "Oh, you are so precious; could you provide from the strict answer a json object with the object = main_cat main_cat: your_main_cat_tag_answer, sub_cat_tag_1: your_sub_cat_tag_answer_1, ..."
-    re_classify = AI.asks_ai(request_1, Config.ROLE)
+    re_classify = AI.asks_ai(request_1, Config.ROLE)   
     print(re_classify)
     return {
         "body": Web.get_request(args)
