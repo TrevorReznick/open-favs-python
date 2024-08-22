@@ -167,11 +167,48 @@ class MetaDataExtractor:
         return json.dumps(filtered_metadata, ensure_ascii=False)
     
     def get_title(self):
+    # Se soup non è definito, restituisce None
+        if not self.soup:
+            return None
+
+        # Cerca il tag <title> o qualsiasi altro elemento con il tag 'title'
+        title_tag = self.soup.title or self.soup.find('title')
+        
+        if title_tag:
+            # Verifica se il titolo non è escluso e restituisce il testo formattato
+            title_text = title_tag.get_text().strip()
+            if not Config.is_excluded(title_text):
+                return self.format_string(title_text)
+
+        # Cerca un tag <h1> e verifica se il testo non è escluso
+        h1_tag = self.soup.find('h1')
+        if h1_tag:
+            h1_text = h1_tag.get_text().strip()
+            if not Config.is_excluded(h1_text):
+                return h1_text
+
+        # Cerca un tag <h2> e verifica se il testo non è escluso
+        h2_tag = self.soup.find('h2')
+        if h2_tag:
+            h2_text = h2_tag.get_text().strip()
+            if not Config.is_excluded(h2_text):
+                return h2_text
+        
+        # Se c'è un titolo ma non è stato ancora formattato e restituito
+        if title_tag and title_tag.string:
+            return self.format_string(title_tag.string)
+        
+        # Se non viene trovato nulla di valido, restituisce None
+        return None
+    
+    def get_title_old(self):
         
         if not self.soup:
             return None
         
-        title_tag = self.soup.title
+        title_tag = self.soup.title or self.soup.find('title')
+        if (title_tag):
+            return title_tag
 
         if title_tag and not Config.is_excluded(title_tag.get_text()):
             return title_tag.get_text().strip()
@@ -186,7 +223,7 @@ class MetaDataExtractor:
         if h2_tag and not Config.is_excluded(h2_tag.get_text()):
             return h2_tag.get_text().strip()
         
-        title_tag = self.soup.find('title')
+        
 
         if title_tag and title_tag.string:
             #print(title_tag)
