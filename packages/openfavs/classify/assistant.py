@@ -106,8 +106,9 @@ def main(args):
     main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
     sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])     
     
-    html_content = extractor.get_html_content()
     description = extractor.get_description()
+    html_content = extractor.get_html_content()
+    print('debug :', description)
 
     # qui viene seguito controllo se la pagina è accessibile o meno
 

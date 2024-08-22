@@ -110,6 +110,26 @@ class MetaDataExtractor:
         url = self.url
         parsed_url = urlparse(url)
         hostname = parsed_url.hostname
+        
+        # Lista dei sottodomini comuni da rimuovere
+        common_subdomains = ['www', 'api', 'mail', 'ftp', 'blog', 'shop', 'dev', 'staging', 'test', 'm', 'cdn']
+
+        # Rimozione dei sottodomini comuni
+        for subdomain in common_subdomains:
+            if hostname.startswith(f"{subdomain}."):
+                hostname = hostname[len(subdomain) + 1:]
+                break  # Rompe il ciclo dopo aver rimosso il primo sottodominio trovato
+            
+        # Split del dominio per ottenere la parte principale
+        domain_parts = hostname.split('.')
+        
+        # Restituisce la prima parte del dominio, con la prima lettera maiuscola
+        return domain_parts[0].capitalize()
+    
+    def get_name_by_host_old(self):
+        url = self.url
+        parsed_url = urlparse(url)
+        hostname = parsed_url.hostname
         if hostname.startswith("www."):
             hostname = hostname[4:]            
             #print(hostname)
