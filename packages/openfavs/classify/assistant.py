@@ -3,7 +3,7 @@
 from openai import AzureOpenAI, BadRequestError
 import get_site_info, web_control
 from load_json import main_cat, sub_cat
-from utils import find_partial_matches
+from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict
 
 class Config:
     MODEL = "gpt-4"
@@ -13,7 +13,13 @@ class Config:
     GEMERIC_ROLE = "You are a generic GPT-4 assistant, provide kindly answers to user's questions"
     ERROR = "There was an error processing your request"
     OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming soon"
-    INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"    
+    INAPPROPRIATE = "Temo che la tua richiesta possa essere fraintesa. Puoi riformularla in maniera più appropriata?"
+    SUGGESTIONS = {
+        "cloud-native": "serverless",
+        "portfolio": "inspiration",
+        "full stack developer": "developement",
+        "amministratore di sisteme": "system engineer"
+    }
 
 
 import re, json, os
@@ -110,7 +116,51 @@ def main(args):
     html_content = extractor.get_html_content()
     print('debug :', description)
 
-    # qui viene seguito controllo se la pagina è accessibile o meno
+    # @@ testing find similarities and spli sentences @@ #
+
+    """matches = find_partial_matches(description, Config.SUGGESTIONS)
+
+    for match in matches:
+        print(f"Found match: {match[0]} -> {match[1]}")
+    """
+
+    # 1. Suddividi la frase in sottofrasi
+    sub_phrases = split_sentence(description)
+    print(f"Sub-phrases: {sub_phrases}")
+
+    # 2. Crea un dizionario delle sottofrasi
+    phrases_dict = create_phrases_dict(sub_phrases)
+    print(f"Phrases dictionary: {phrases_dict}")
+
+    suggestions_found = {}
+    suggestion = ""
+
+
+    
+    for idx, sub_phrase in phrases_dict.items():
+
+        matches = find_partial_matches_new(sub_phrase, Config.SUGGESTIONS)
+
+        formatted_matches = [{k: v} for k, v in matches]
+
+        if formatted_matches:  # Aggiungi solo se ci sono match
+            suggestion_ = suggestions_found[sub_phrase] = formatted_matches
+            suggestion_1 = [list(d.values())[0] for d in suggestion_]
+            #print('suggestion', suggestion)
+            suggestion = (" ".join(suggestion_1))
+            print('suggestion', suggestion)
+        else:
+            print('nessuna suggestion trovata')
+
+
+        """if(matches):
+            print(f"Matches for sub-phrase '{sub_phrase}': {matches}")
+        else:
+            print('nessuna suggestion trovata')"""
+    
+    # @@ prod flow @@ #
+
+        # qui viene seguito controllo se la pagina è accessibile o meno
 
     if(html_content):
         print('html content found!')
@@ -124,9 +174,9 @@ def main(args):
     #print(html_content)
     #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
     request = f"""
-        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, a description {description} and a site content: {html_content}; 
-        can you give me 1 main category tag and 5 sub category tags, from provided strings and the he description; if description has not suitable inormations, you will consider the whole site content provided? I please you
-        to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; last part is optional?
+        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, a description {description}, a site content: {html_content} and a suggestion {suggestion} for main category; 
+        can you give me 1 main category, consider suggestion if present and 5 sub category tags, from provided strings within the description? if description has not suitable informations, you will consider the whole site content provided? I please you
+        to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; last part is optional. Thanks a lot
     """
     #print('prompt', request)
     classify = AI.asks_ai(request, Config.ROLE)
