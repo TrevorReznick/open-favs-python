@@ -3,7 +3,8 @@
 from openai import AzureOpenAI, BadRequestError
 import get_site_info, web_control
 from load_json import main_cat, sub_cat
-from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict
+from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
+from prompts.prompts import create_classify_prompt
 
 class Config:
     MODEL = "gpt-4"
@@ -179,86 +180,19 @@ def main(args):
         print('html content not found; ', url_logs)
         print('debug html content found: ', url_utils.get_html_content())
         print('debug soup results: ', extractor.get_html_content())
+        
     #print(html_content)
     #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
-    request = f"""
-        You should be so skilled to identify the main_category one solely by from the choosing list: {main_cat_str} analizyng the description: {description} 
-        and if there is suggestion {suggestion} give it as main_category; furthermore, you should find 5 tags exclusively from the list:  {sub_cat_str} 
-        and classify the site you are analizyng by providing 5 classify tags; the tags in the list should already be exhaustive for the classification 
-        we intend to do, but only if you cannot find tags adaptable to the description, then you will suggest new tags, using the formula: suggested tags - > tags, 
-        inserting them separately in the list of results of which you will find the formatting rules later.
-        I please you to split the strict answer question, the classification, and notes of the logic you have used using the following rules: use a json object with 
-        this shape: 
-        {{
-            'main_category': category, 
-            '(your)tag_1': your_tag_1, 
-            'your_tag_2': your_tag_2, 
-            'your_tag_3': your_tag_3, 
-            'your_tag_4': your_tag_4,
-            'your_tag_5': your_tag_5,
-            ***'suggested_tag_n': suggested_tag_n***
-        }};
-        the response will be a string without spaces, prefixed with str_to_obj: the json_object_string, a string of the notes of logic prefixed with 'my_string: ""'
-        thanks a lot!        
-    """
-    request_old = f"""
-        You should be so skilled to identify the main_category one solely by from the choosing list: {main_cat_str} analizyng the description: {description};
-        furthermore, you should find 5 tags exclusively from the list:  {sub_cat_str} and classify the site you are analizyng by providing 5 classify tags.
-        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, a description {description}, a site content: {html_content} 
-        and a suggestion {suggestion} for main category; can you give me 1 main category, consider suggestion if present and 5 sub category tags, 
-        from provided strings within the description? if description has not suitable informations, you will consider the whole site content provided? 
-        I please you to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; 
-        last part is optional. Thanks a lot!
-    """
+    #(main_cat_str, description, suggestion, sub_cat_str):
+    prompt = create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str)
+    #print(prompt)
     #print('prompt', request)
-    classify = AI.asks_ai(request, Config.ROLE)
-    # Step 2: Assicurati che classify sia una stringa
-        
-    json_match = re.search(r'str_to_obj:({.*?})', classify)
-    if json_match:
-        json_str = json_match.group(1)
-        try:
-            # Converti la stringa JSON in un dizionario Python
-            json_data = json.loads(json_str)
-            formatted_json = json.dumps(json_data, indent=4)
-            print("Contenuto JSON estratto e formattato:")
-            print(formatted_json)
-        except json.JSONDecodeError as e:
-            print(f"Errore nel decodificare la stringa JSON: {e}")
-    else:
-        print("Nessun contenuto JSON trovato.")
-
-    # Estrarre il contenuto di my_string
-    my_string_match = re.search(r'my_string:"([^"]*)"', classify)
-    if my_string_match:
-        AI_analysis = my_string_match.group(1)
-        print("\nContenuto di my_string:")
-        print(AI_analysis)
-    else:
-        print("Nessun contenuto my_string trovato.")
-
-    # Step 4: Controlla se la stringa è vuota
-    """
-    if not classify_str:
-        print("La risposta di AI.asks_ai è vuota o contiene solo spazi.")
-        AI_response = None
-    else:
-        try:
-            # Step 5: Converte la stringa in un dizionario Python
-            AI_response = json.loads(classify_str)
-
-            # Step 6: Formatta e stampa il dizionario come JSON formattato
-            formatted_json = json.dumps(AI_response, indent=4)
-            print(formatted_json)
-
-        except json.JSONDecodeError as e:
-            print(f"Errore nel decodificare la stringa JSON: {e}")
-            print(f"Contenuto ricevuto: '{classify_str}'")  # Debug: stampa il contenuto per capire il problema
-            AI_response = None
-    """       
-            
-    
-    
+    classify = AI.asks_ai(prompt, Config.ROLE)
+    json_object = extract_json(classify, 'str_to_obj')
+    my_string = extract_my_string(classify, 'my_string')
+    # Combina i risultati
+    result = {**json_object, **my_string}
+    print(result)
     
     request_1 = "Oh, you are so precious; could you provide from the strict answer a json object with the object = main_cat main_cat: your_main_cat_tag_answer, sub_cat_tag_1: your_sub_cat_tag_answer_1, ..."
     re_classify = AI.asks_ai(request_1, Config.ROLE)   
@@ -266,37 +200,4 @@ def main(args):
     return {
         "body": Web.get_request(args)
     }
-
-"""
-def add_element(self, element, value):
-    # Aggiunge una coppia chiave-valore al dizionario
-    self.site_info[element] = value
-    return self.site_info
-
-title_tag = soup.find('title')
-meta_description = soup.find('meta', attrs={"name": "description"})
-description = soup.title.description
-self.add_element('description', description)
-#self.add_element('meta_description' , meta_description)
-print("Debug Titolo:", title)
-print('Debug title_tag: ', title_tag)
-#print('Debug meta_description: ', meta_description)
-if meta_description:
-    print(meta_description['content'])  # Stampa il contenuto del tag meta description
-    # Estrai il canonical link
-    canonical_link = soup.find('link', attrs={'rel': 'canonical'})
-    if canonical_link:
-        print(canonical_link['href'])  # Stampa l'URL del canonical link
-        tag_as_string = str(canonical_link)
-        json_output = json.dumps({'content': tag_as_string}, ensure_ascii=False)
-        self.add_element('canonical_link', json_output)
-    # Estrai i metadati og:title
-    #og_title = soup.find('meta', attrs={'property': 'og:title'})
-    #if og_title:
-    #print(og_title['content'])  # Stampa il contenuto del tag og:title
-    #self.add_element('og_title', og_title)
-    print('Debug description: ', description)
-    return self.site_info
-"""
-
      

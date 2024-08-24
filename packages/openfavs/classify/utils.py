@@ -1,5 +1,55 @@
-import re
+import re, json
 from difflib import SequenceMatcher 
+
+def extract_json(output, prefix):
+    """
+    Estrae un oggetto JSON basato su un prefisso specificato.
+
+    :param output: La stringa di input contenente il JSON.
+    :param prefix: Il prefisso usato per identificare l'oggetto JSON nella stringa.
+    :return: Un dizionario contenente 'json_data' se trovato.
+    """
+    # Crea un pattern dinamico per l'oggetto JSON
+    json_pattern = rf'{prefix}:({{.*?}})'
+    
+    # Trova e decodifica il JSON
+    json_match = re.search(json_pattern, output)
+    if json_match:
+        json_str = json_match.group(1)
+        try:
+            json_data = json.loads(json_str)
+            formatted_json = json.dumps(json_data, indent=4)
+            print("Contenuto JSON estratto e formattato:")
+            print(formatted_json)
+            return {'json_data': json_data}
+        except json.JSONDecodeError as e:
+            print(f"Errore nel decodificare la stringa JSON: {e}")
+            return {'json_data': None}
+    else:
+        print("Nessun contenuto JSON trovato.")
+        return {'json_data': None}
+
+def extract_my_string(output, prefix):
+    """
+    Estrae il contenuto di 'my_string' basato su un prefisso specificato.
+
+    :param output: La stringa di input contenente la stringa di analisi.
+    :param prefix: Il prefisso usato per identificare la stringa di analisi nella stringa.
+    :return: Un dizionario contenente 'AI_analysis' se trovato.
+    """
+    # Crea un pattern dinamico per la stringa di analisi
+    analysis_pattern = rf'{prefix}:"([^"]*)"'
+    analysis_match = re.search(analysis_pattern, output)
+    if analysis_match:
+        AI_analysis = analysis_match.group(1)
+        print("\nContenuto di my_string:")
+        print(AI_analysis)
+        return {'AI_analysis': AI_analysis}
+    else:
+        print("Nessun contenuto my_string trovato.")
+        return {'AI_analysis': None}    
+    
+
 
 def find_partial_matches_old(input_phrase, dictionary, threshold=0.8):
         matches = []
