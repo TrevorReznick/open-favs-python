@@ -16,7 +16,7 @@ def find_partial_matches_old(input_phrase, dictionary, threshold=0.8):
 
 def split_sentence(sentence):
     # Usa una regex per separare la frase su ', ', ' and ', ';' e altri separatori
-    sub_phrases = re.split(r',\s*|and\s+|;\s*|\.\s*', sentence)
+    sub_phrases = re.split(r',\s*|and\s+|;\s*|\.\s*|\b e \b', sentence)
     # Rimuovi spazi bianchi inutili e stringhe vuote
     sub_phrases = [phrase.strip() for phrase in sub_phrases if phrase.strip()]
     return sub_phrases
