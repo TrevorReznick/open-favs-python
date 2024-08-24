@@ -33,6 +33,40 @@ def create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str):
     
     return prompt
 
+def create_reclassify_prompt(main_cat_str, sub_cat_str, inspiration, my_string):
+    
+    """
+    Crea un prompt formattato per la classificazione basata su descrizione e lista di categorie.
+
+    :param main_cat_str: Stringa delle categorie principali da cui scegliere.
+    :param description: Descrizione da analizzare.
+    :param suggestion: Suggerimento per la categoria principale.
+    :param sub_cat_str: Stringa delle sottocategorie da cui scegliere i tag.
+    :return: Una stringa di prompt formattata.
+    """
+    
+    prompt = f"""
+        Based on the content of this text {my_string} you should provide 1 main category and 5 tags to classify the provided text; feel free to
+        use tags you want, but there is a list of suggested main_cat {main_cat_str} and a list of {sub_cat_str} that should be already be exhaustive 
+        for the classification  we intend to do; focusing on developement, when you will do the classification you will inspire to the list {inspiration}
+        I please you to split the strict answer question, the classification, and notes of the logic you have  used through these rules: 
+        use a json object with this shape: 
+        {{
+            'main_category': category, 
+            '(your)tag_1': your_tag_1, 
+            'your_tag_2': your_tag_2, 
+            'your_tag_3': your_tag_3, 
+            'your_tag_4': your_tag_4,
+            'your_tag_5': your_tag_5,
+            ***'suggested_tag_n': suggested_tag_n***
+        }};
+        the response will be a string without spaces, prefixed with str_to_obj: the json_object_string, a string of the 
+        notes of logic that you used prefixed with 'my_string: ""'
+        good luck!
+    """
+    
+    return prompt
+
 
 #request_old = f"""
 #You should be so skilled to identify the main_category one solely by from the choosing list: {main_cat_str} analizyng the description: {description};

@@ -4,13 +4,14 @@ from openai import AzureOpenAI, BadRequestError
 import get_site_info, web_control
 from load_json import main_cat, sub_cat
 from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
-from prompts.prompts import create_classify_prompt
+from prompts.prompts import create_classify_prompt, create_reclassify_prompt
 
 class Config:
     MODEL = "gpt-4"
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
     #ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "
     ROLE = "You are the Openfavs virtual assistant, your role is web site analyst, classifyng the input data"   
+    SUPERVISOR_ROLE = "You are a supervisor of a data entry operator who has classified resources. Your task is to reformulate the result based on the elements provided to you"
     GEMERIC_ROLE = "You are a generic GPT-4 assistant, provide kindly answers to user's questions"
     ERROR = "There was an error processing your request"
     OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming soon"
@@ -22,6 +23,116 @@ class Config:
         "full stack developer": "developement",
         "amministratore di sisteme": "system engineer"
     }
+    RESERVED_WORDS = {
+        "Code",
+        "Development",
+        "Deployment",
+        "Hosting",
+        "Versioning",
+        "Continuous Integration",
+        "Continuous Deployment",
+        "Server",
+        "Cloud",
+        "Microservices",
+        "Containerization",
+        "Kubernetes",
+        "Docker",
+        "Pipeline",
+        "Git",
+        "GitHub",
+        "GitLab",
+        "Bitbucket",
+        "Automation",
+        "Jenkins",
+        "CI/CD",
+        "DevOps",
+        "Infrastructure",
+        "API",
+        "RESTful",
+        "GraphQL",
+        "Load Balancer",
+        "Replica",
+        "Backup",
+        "Scalability",
+        "Performance",
+        "Load Testing",
+        "Staging",
+        "Rollback",
+        "Monitoring",
+        "Log Management",
+        "Ansible",
+        "Terraform",
+        "CloudFormation",
+        "Infrastructure as Code",
+        "Virtualization",
+        "Security",
+        "HTTPS",
+        "SSL/TLS",
+        "Firewall",
+        "DNS",
+        "CDN",
+        "Serverless",
+        "Edge Computing",
+        "Scripting",
+        "Container",
+        "Orchestration",
+        "Cluster",
+        "Provisioning",
+        "Scaling",
+        "High Availability",
+        "Fault Tolerance",
+        "Blue-Green Deployment",
+        "Canary Release",
+        "Environment",
+        "Artifact",
+        "Build",
+        "Test Automation",
+        "Unit Testing",
+        "Integration Testing",
+        "Acceptance Testing",
+        "Load Balancing",
+        "Zero Downtime",
+        "API Gateway",
+        "Service Mesh",
+        "IAM",
+        "Secrets Management",
+        "Configuration Management",
+        "Infrastructure Monitoring",
+        "Incident Response",
+        "Alerting",
+        "Observability",
+        "Tracing",
+        "Logging",
+        "Metrics",
+        "Stateful",
+        "Stateless",
+        "Hybrid Cloud",
+        "Multi-Cloud",
+        "Private Cloud",
+        "Public Cloud",
+        "Elasticity",
+        "Networking",
+        "VPC",
+        "Subnet",
+        "Firewall Rules",
+        "Ingress",
+        "Egress",
+        "Load Testing",
+        "Penetration Testing",
+        "Static Code Analysis",
+        "Dynamic Code Analysis",
+        "Code Review",
+        "Pull Request",
+        "Merge",
+        "Branch",
+        "Feature Flags",
+        "Rollout",
+        "Rollback",
+        "Secret Key",
+        "Environment Variables"
+    }
+    
+    
 
 
 import re, json, os
@@ -182,8 +293,7 @@ def main(args):
         print('debug soup results: ', extractor.get_html_content())
         
     #print(html_content)
-    #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
-    #(main_cat_str, description, suggestion, sub_cat_str):
+    
     prompt = create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str)
     #print(prompt)
     #print('prompt', request)
@@ -191,12 +301,14 @@ def main(args):
     json_object = extract_json(classify, 'str_to_obj')
     my_string = extract_my_string(classify, 'my_string')
     # Combina i risultati
-    result = {**json_object, **my_string}
-    print(result)
     
-    request_1 = "Oh, you are so precious; could you provide from the strict answer a json object with the object = main_cat main_cat: your_main_cat_tag_answer, sub_cat_tag_1: your_sub_cat_tag_answer_1, ..."
-    re_classify = AI.asks_ai(request_1, Config.ROLE)   
+    result = {**json_object, **my_string}
+    print(result)    
+    reserved_words = ", ".join(Config.RESERVED_WORDS)
+    refining_prompt = create_reclassify_prompt(main_cat_str, sub_cat_str, reserved_words, my_string)
+    re_classify = AI.asks_ai(refining_prompt, Config.SUPERVISOR_ROLE)   
     print(re_classify)
+    
     return {
         "body": Web.get_request(args)
     }
