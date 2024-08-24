@@ -6,27 +6,19 @@
     {
         "id": 1,
         "cat_name": "course"
-    },
-    {
-        "id": 4,
-        "cat_name": "favourites"
-    },
+    },    
     {
         "id": 10,
         "cat_name": "forum"
     },
     {
         "id": 16,
-        "cat_name": "gpt shared prompt result"
+        "cat_name": "chat_gpt"
     },
     {
         "id": 14,
         "cat_name": "inspiration"
-    },
-    {
-        "id": 3,
-        "cat_name": "internal"
-    },
+    },    
     {
         "id": 5,
         "cat_name": "news"
@@ -34,19 +26,11 @@
     {
         "id": 8,
         "cat_name": "podcast"
-    },
-    {
-        "id": 11,
-        "cat_name": "productivity"
-    },
+    },    
     {
         "id": 13,
         "cat_name": "productivity tool"
-    },
-    {
-        "id": 15,
-        "cat_name": "project"
-    },
+    },   
     {
         "id": 6,
         "cat_name": "search web"

@@ -17,6 +17,7 @@ class Config:
     SUGGESTIONS = {
         "cloud-native": "serverless",
         "portfolio": "inspiration",
+        "projects": "inspiration",
         "full stack developer": "developement",
         "amministratore di sisteme": "system engineer"
     }
@@ -109,12 +110,19 @@ def main(args):
     print('init MetaDataExtractor class')
     extractor = get_site_info.MetaDataExtractor(url)
 
+    # @@ get the cats json object @@ #
+
     main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
     sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])     
     
     description = extractor.get_description()
     html_content = extractor.get_html_content()
-    print('debug :', description)
+
+    #
+    if(description):
+        print('description exists :', description)
+    else: 
+        print('description not exists!')
 
     # @@ testing find similarities and spli sentences @@ #
 
@@ -174,13 +182,84 @@ def main(args):
     #print(html_content)
     #request = f"If I give you an object with categories {main_cat_str} and {sub_cat_str}, and a content site, can you give me 3 tags from the object to classify the site?"
     request = f"""
-        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, a description {description}, a site content: {html_content} and a suggestion {suggestion} for main category; 
-        can you give me 1 main category, consider suggestion if present and 5 sub category tags, from provided strings within the description? if description has not suitable informations, you will consider the whole site content provided? I please you
-        to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; last part is optional. Thanks a lot
+        You should be so skilled to identify the main_category one solely by from the choosing list: {main_cat_str} analizyng the description: {description} 
+        and if there is suggestion {suggestion} give it as main_category; furthermore, you should find 5 tags exclusively from the list:  {sub_cat_str} 
+        and classify the site you are analizyng by providing 5 classify tags; the tags in the list should already be exhaustive for the classification 
+        we intend to do, but only if you cannot find tags adaptable to the description, then you will suggest new tags, using the formula: suggested tags - > tags, 
+        inserting them separately in the list of results of which you will find the formatting rules later.
+        I please you to split the strict answer question, the classification, and notes of the logic you have used using the following rules: use a json object with 
+        this shape: 
+        {{
+            'main_category': category, 
+            '(your)tag_1': your_tag_1, 
+            'your_tag_2': your_tag_2, 
+            'your_tag_3': your_tag_3, 
+            'your_tag_4': your_tag_4,
+            'your_tag_5': your_tag_5,
+            ***'suggested_tag_n': suggested_tag_n***
+        }};
+        the response will be a string without spaces, prefixed with str_to_obj: the json_object_string, a string of the notes of logic prefixed with 'my_string: ""'
+        thanks a lot!        
+    """
+    request_old = f"""
+        You should be so skilled to identify the main_category one solely by from the choosing list: {main_cat_str} analizyng the description: {description};
+        furthermore, you should find 5 tags exclusively from the list:  {sub_cat_str} and classify the site you are analizyng by providing 5 classify tags.
+        There are 2 based data strings, main category: {main_cat_str} and sub category: {sub_cat_str}, a description {description}, a site content: {html_content} 
+        and a suggestion {suggestion} for main category; can you give me 1 main category, consider suggestion if present and 5 sub category tags, 
+        from provided strings within the description? if description has not suitable informations, you will consider the whole site content provided? 
+        I please you to split the strict answer question, classification, parsed in markdown, and enventual notes of the logic you have used; 
+        last part is optional. Thanks a lot!
     """
     #print('prompt', request)
     classify = AI.asks_ai(request, Config.ROLE)
-    print(classify)
+    # Step 2: Assicurati che classify sia una stringa
+        
+    json_match = re.search(r'str_to_obj:({.*?})', classify)
+    if json_match:
+        json_str = json_match.group(1)
+        try:
+            # Converti la stringa JSON in un dizionario Python
+            json_data = json.loads(json_str)
+            formatted_json = json.dumps(json_data, indent=4)
+            print("Contenuto JSON estratto e formattato:")
+            print(formatted_json)
+        except json.JSONDecodeError as e:
+            print(f"Errore nel decodificare la stringa JSON: {e}")
+    else:
+        print("Nessun contenuto JSON trovato.")
+
+    # Estrarre il contenuto di my_string
+    my_string_match = re.search(r'my_string:"([^"]*)"', classify)
+    if my_string_match:
+        AI_analysis = my_string_match.group(1)
+        print("\nContenuto di my_string:")
+        print(AI_analysis)
+    else:
+        print("Nessun contenuto my_string trovato.")
+
+    # Step 4: Controlla se la stringa è vuota
+    """
+    if not classify_str:
+        print("La risposta di AI.asks_ai è vuota o contiene solo spazi.")
+        AI_response = None
+    else:
+        try:
+            # Step 5: Converte la stringa in un dizionario Python
+            AI_response = json.loads(classify_str)
+
+            # Step 6: Formatta e stampa il dizionario come JSON formattato
+            formatted_json = json.dumps(AI_response, indent=4)
+            print(formatted_json)
+
+        except json.JSONDecodeError as e:
+            print(f"Errore nel decodificare la stringa JSON: {e}")
+            print(f"Contenuto ricevuto: '{classify_str}'")  # Debug: stampa il contenuto per capire il problema
+            AI_response = None
+    """       
+            
+    
+    
+    
     request_1 = "Oh, you are so precious; could you provide from the strict answer a json object with the object = main_cat main_cat: your_main_cat_tag_answer, sub_cat_tag_1: your_sub_cat_tag_answer_1, ..."
     re_classify = AI.asks_ai(request_1, Config.ROLE)   
     print(re_classify)

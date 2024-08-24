@@ -14,6 +14,7 @@ class Config:
         "undefined": True,
         "index": True,
         "Benvenuto": True,
+        "sezioni": True,
         "": True,
         None: True,
     }
@@ -219,37 +220,7 @@ class MetaDataExtractor:
             return self.format_string(title_tag.string)
         
         # Se non viene trovato nulla di valido, restituisce None
-        return None
-    
-    def get_title_old(self):
-        
-        if not self.soup:
-            return None
-        
-        title_tag = self.soup.title or self.soup.find('title')
-        if (title_tag):
-            return title_tag
-
-        if title_tag and not Config.is_excluded(title_tag.get_text()):
-            return title_tag.get_text().strip()
-        
-        h1_tag = self.soup.find('h1')
-
-        if h1_tag and not Config.is_excluded(h1_tag.get_text()):
-            return h1_tag.get_text().strip()
-        
-        h2_tag = self.soup.find('h2')
-
-        if h2_tag and not Config.is_excluded(h2_tag.get_text()):
-            return h2_tag.get_text().strip()
-        
-        
-
-        if title_tag and title_tag.string:
-            #print(title_tag)
-            return self.format_string(title_tag.string)
-        
-        return None
+        return None    
     
     def get_canonical_link(self):
 
