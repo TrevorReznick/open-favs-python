@@ -13,7 +13,7 @@ class Config:
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
     #ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "
     ROLE = "You are the Openfavs virtual assistant, your role is web site analyst, classifyng the input data"   
-    SUPERVISOR_ROLE = "You are a supervisor of a data entry operator who has classified resources. Your task is to reformulate the result based on the elements provided to you"
+    SUPERVISOR_ROLE = "You are a supervisor of a data entry operator who has classified some resources. Your task is to is to provide answers in the third person, in a professional and friendly manner"
     GEMERIC_ROLE = "You are a generic GPT-4 assistant, provide kindly answers to user's questions"
     ERROR = "There was an error processing your request"
     OUT_OF_SERVICE = "We apogize, but the assistant is not available. Coming soon"

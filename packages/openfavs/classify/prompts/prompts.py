@@ -46,10 +46,14 @@ def create_reclassify_prompt(main_cat_str, sub_cat_str, inspiration, my_string):
     """
     
     prompt = f"""
-        Based on the content of this text {my_string} you should provide 1 main category and 5 tags to classify the provided text; feel free to
-        use tags you want, but there is a list of suggested main_cat {main_cat_str} and a list of {sub_cat_str} that should be already be exhaustive 
-        for the classification  we intend to do; focusing on developement, when you will do the classification you will inspire to the list {inspiration}
-        I please you to split the strict answer question, the classification, and notes of the logic you have  used through these rules: 
+        You should perform these 2 tasks: Task 1 - Based on the content of this text {my_string} you should provide 1 main category and 5 tags to classify 
+        the provided text; feel free to use tags you want, but there is a list of suggested main_cat {main_cat_str} and a list of {sub_cat_str} that should 
+        be already be exhaustive for the classification  we intend to do; focusing on developement, when you will do the classification you will inspire to 
+        the list {inspiration}; Task 2 - You shoud argue the choices you have made, trying to summarize your reasoning as if it were 'your description' reworked 
+        for knowledge purposes: you should start your summary with expressions such as 'the content was detected...' or 'the content of the site is...' or 'the 
+        resource provided belongs to the category...'; make the best use of your knowledge if is possible. I please you to split the strict answer question, 
+        the classification - task-1, and the elaborated description (the notes of 
+        the logic you have used reworked); please do it through these rules: 
         use a json object with this shape: 
         {{
             'main_category': category, 
@@ -59,7 +63,7 @@ def create_reclassify_prompt(main_cat_str, sub_cat_str, inspiration, my_string):
             'your_tag_4': your_tag_4,
             'your_tag_5': your_tag_5,
             ***'suggested_tag_n': suggested_tag_n***
-        }};
+        }};        
         the response will be a string without spaces, prefixed with str_to_obj: the json_object_string, a string of the 
         notes of logic that you used prefixed with 'my_string: ""'
         good luck!
