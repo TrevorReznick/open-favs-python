@@ -7,7 +7,9 @@ from utils import find_partial_matches, find_partial_matches_new, split_sentence
 from prompts.prompts import create_classify_prompt, create_reclassify_prompt
 
 class Config:
-    MODEL = "gpt-4"
+    #MODEL = "gpt-4"ss  
+    GPT_4 = "gpt-4"
+    GPT_3 = "gpt-35-turbo"
     WELCOME = "Benenuti nell'assistente virtuale di Openfavs"
     #ROLE = "You are the Openfavs virtual assistant. The first answear to first input have to be: 'hello, i'm an Openfavs assistant. How can help you? "
     ROLE = "You are the Openfavs virtual assistant, your role is web site analyst, classifyng the input data"   
@@ -171,7 +173,7 @@ class ChatBot:
         ]
 
         try:
-            comp = self.ai.chat.completions.create(model=Config.MODEL, messages=req)
+            comp = self.ai.chat.completions.create(model=Config.GPT_4, messages=req)
             if len(comp.choices) > 0:
                 content = comp.choices[0].message.content
                 #print('debug chatbot')
@@ -197,10 +199,9 @@ class Website:
         #print('init class website')    
     
 
-    def get_request(self, args):        
-        self.url = args.get("url")  
-        #url_control = web_control.WebControl(self, args)
-        #print(url_control.get_url_info())
+    def get_request(self, args):
+        
+        self.url = args.get("url")        
         extractor = get_site_info.MetaDataExtractor(args.get("url"))
         json_metadata = extractor.to_json()
         metadata_obj = json.loads(json_metadata)            

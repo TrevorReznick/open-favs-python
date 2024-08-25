@@ -152,13 +152,15 @@ class MetaDataExtractor:
             'tags': None
         }
 
-        # Itera sui metadati estratti
+        # @@ Itera sui metadati estratti @@
+        
         for key, value in metadata.items():
             if Config.is_excluded(value):
                 print(f"Il valore '{value}' per '{key}' è escluso.")
                 continue
 
-            # Controlla e assegna i valori
+            # @@ Controlla e assegna i valori metadata @@ 
+            
             if key == 'og:site_name':
                 filtered_metadata['name'] = self.format_string(value)
             elif key == 'og:title':
@@ -167,8 +169,10 @@ class MetaDataExtractor:
                 filtered_metadata['description'] = self.format_string(value)
             elif key == 'keywords':
                 filtered_metadata['tags'] = value.split(', ')  # Splitta la stringa in una lista di tag
+                
 
-        # Gestisci fallback se i metadati non sono presenti
+        # @@ Gestisci fallback se i metadati non sono presenti @@
+        
         if not filtered_metadata['name']:
             #url = metadata.get('canonical', '')
             filtered_metadata['name'] = self.get_name_by_host()            
