@@ -1,0 +1,460 @@
+[
+    {
+        "id": 1,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Linguaggi di Programmazione e Paradigmi",
+        "sub_categories": [
+            {
+                "sub_category": "JavaScript"
+            },
+            {
+                "sub_category": "Typescript"
+            },
+            {
+                "sub_category": "Python"
+            },
+            {
+                "sub_category": "Php"
+            },
+            {
+                "sub_category": "Go"
+            },
+            {
+                "sub_category": "Rust"
+            },
+            {
+                "sub_category": "Functional Programming"
+            },
+            {
+                "sub_category": "Object-Oriented Programming (OOP)"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Frameworks e Librerie",
+        "sub_categories": [
+            {
+                "sub_category": "React"
+            },
+            {
+                "sub_category": "Angular"
+            },
+            {
+                "sub_category": "Vue.js"
+            },
+            {
+                "sub_category": "Svelte"
+            },
+            {
+                "sub_category": "SvelteKit"
+            },
+            {
+                "sub_category": "Next.js"
+            },
+            {
+                "sub_category": "Nuxt.js"
+            },
+            {
+                "sub_category": "Astro"
+            },
+            {
+                "sub_category": "SolidJS"
+            },
+            {
+                "sub_category": "Alpine.js"
+            },
+            {
+                "sub_category": "Ember.js"
+            },
+            {
+                "sub_category": "Tailwind CSS"
+            },
+            {
+                "sub_category": "Styled Components"
+            },
+            {
+                "sub_category": "Emotion"
+            },
+            {
+                "sub_category": "Chakra UI"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "area": "Sviluppo Software e DevOps",
+        "category": "DevOps e CI/CD",
+        "sub_categories": [
+            {
+                "sub_category": "Jenkins"
+            },
+            {
+                "sub_category": "CircleCI"
+            },
+            {
+                "sub_category": "GitHub Actions"
+            },
+            {
+                "sub_category": "GitLab CI/CD"
+            },
+            {
+                "sub_category": "Travis CI"
+            },
+            {
+                "sub_category": "Continuous Integration (CI)"
+            },
+            {
+                "sub_category": "Continuous Deployment (CD)"
+            },
+            {
+                "sub_category": "Infrastructure as Code (IaC)"
+            },
+            {
+                "sub_category": "Ansible"
+            },
+            {
+                "sub_category": "Terraform"
+            },
+            {
+                "sub_category": "CloudFormation"
+            },
+            {
+                "sub_category": "Kubernetes"
+            },
+            {
+                "sub_category": "Docker"
+            },
+            {
+                "sub_category": "Helm"
+            },
+            {
+                "sub_category": "ArgoCD"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Frontend e Backend Development",
+        "sub_categories": [
+            {
+                "sub_category": "JAMstack"
+            },
+            {
+                "sub_category": "SSR (Server-Side Rendering)"
+            },
+            {
+                "sub_category": "SSG (Static Site Generation)"
+            },
+            {
+                "sub_category": "RESTful API"
+            },
+            {
+                "sub_category": "GraphQL"
+            },
+            {
+                "sub_category": "WebSockets"
+            },
+            {
+                "sub_category": "Microservices"
+            },
+            {
+                "sub_category": "Serverless"
+            },
+            {
+                "sub_category": "API Gateway"
+            },
+            {
+                "sub_category": "Service Mesh"
+            },
+            {
+                "sub_category": "BFF (Backend for Frontend)"
+            },
+            {
+                "sub_category": "WebAssembly (Wasm)"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Gestione Dati e Database",
+        "sub_categories": [
+            {
+                "sub_category": "SQL/NoSQL Databases"
+            },
+            {
+                "sub_category": "PostgreSQL"
+            },
+            {
+                "sub_category": "MySQL/MariaDB"
+            },
+            {
+                "sub_category": "MongoDB"
+            },
+            {
+                "sub_category": "Redis"
+            },
+            {
+                "sub_category": "Cassandra"
+            },
+            {
+                "sub_category": "DynamoDB"
+            },
+            {
+                "sub_category": "Prisma"
+            },
+            {
+                "sub_category": "Hasura"
+            },
+            {
+                "sub_category": "Supabase"
+            },
+            {
+                "sub_category": "PlanetScale"
+            },
+            {
+                "sub_category": "FaunaDB"
+            },
+            {
+                "sub_category": "GraphQL Databases"
+            },
+            {
+                "sub_category": "Data Warehousing"
+            },
+            {
+                "sub_category": "Big Data ManagemenT"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Testing e Quality Assurance (QA)",
+        "sub_categories": [
+            {
+                "sub_category": "Unit Testing"
+            },
+            {
+                "sub_category": "Integration Testing"
+            },
+            {
+                "sub_category": "End-to-End Testing"
+            },
+            {
+                "sub_category": "Cypress"
+            },
+            {
+                "sub_category": "Playwright"
+            },
+            {
+                "sub_category": "Jest"
+            },
+            {
+                "sub_category": "Mocha/Chai"
+            },
+            {
+                "sub_category": "Storybook"
+            },
+            {
+                "sub_category": "Static Code Analysis"
+            },
+            {
+                "sub_category": "Dynamic Code Analysis"
+            },
+            {
+                "sub_category": "Security Testing"
+            },
+            {
+                "sub_category": "Performance Testing"
+            },
+            {
+                "sub_category": "Load Testing"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Performance e Ottimizzazione",
+        "sub_categories": [
+            {
+                "sub_category": "Web Performance Optimization (WPO)"
+            },
+            {
+                "sub_category": "Lighthouse"
+            },
+            {
+                "sub_category": "Webpack"
+            },
+            {
+                "sub_category": "ESBuild"
+            },
+            {
+                "sub_category": "Rollup"
+            },
+            {
+                "sub_category": "Parcel"
+            },
+            {
+                "sub_category": "Code Splitting"
+            },
+            {
+                "sub_category": "Lazy Loading"
+            },
+            {
+                "sub_category": "Server-Side Rendering (SSR)"
+            },
+            {
+                "sub_category": "Static Site Generation (SSG)"
+            },
+            {
+                "sub_category": "CDN Optimization"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Sviluppo Mobile",
+        "sub_categories": [
+            {
+                "sub_category": "Native Mobile Development (Swift, Kotlin)"
+            },
+            {
+                "sub_category": "React Native"
+            },
+            {
+                "sub_category": "Flutter"
+            },
+            {
+                "sub_category": "PWA (Progressive Web Apps)"
+            },
+            {
+                "sub_category": "Mobile Backend as a Service (MBaaS)"
+            },
+            {
+                "sub_category": "Cross-Platform Development"
+            },
+            {
+                "sub_category": "Mobile Security"
+            },
+            {
+                "sub_category": "Mobile Performance Optimization"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Metodologie di Sviluppo Avanzate",
+        "sub_categories": [
+            {
+                "sub_category": "Agile Development"
+            },
+            {
+                "sub_category": "Scrum"
+            },
+            {
+                "sub_category": "Kanban"
+            },
+            {
+                "sub_category": "Lean Development"
+            },
+            {
+                "sub_category": "Continuous Delivery"
+            },
+            {
+                "sub_category": "Microservices Architecture"
+            },
+            {
+                "sub_category": "Event-Driven Architecture"
+            },
+            {
+                "sub_category": "CQRS (Command Query Responsibility Segregation)"
+            },
+            {
+                "sub_category": "Server-Driven UI"
+            },
+            {
+                "sub_category": "Micro Frontends"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "area": "Sviluppo Software e DevOps",
+        "category": "UX/UI Design",
+        "sub_categories": [
+            {
+                "sub_category": "User-Centered Design"
+            },
+            {
+                "sub_category": "Responsive Design"
+            },
+            {
+                "sub_category": "Accessibility (WCAG)"
+            },
+            {
+                "sub_category": "Design Systems"
+            },
+            {
+                "sub_category": "Prototyping Tools (Figma, Sketch)"
+            },
+            {
+                "sub_category": "User Testing"
+            },
+            {
+                "sub_category": "Interaction Design"
+            },
+            {
+                "sub_category": "Motion Design"
+            },
+            {
+                "sub_category": "Information Architecture"
+            },
+            {
+                "sub_category": "Visual Design"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Collaboration and Project Management\n\n",
+        "sub_categories": [
+            {
+                "sub_category": "Version Control Systems (Git, GitHub, GitLab)"
+            },
+            {
+                "sub_category": "Continuous Integration/Continuous Deployment (CI/CD)"
+            },
+            {
+                "sub_category": "Project Management Tools (Jira, Trello)"
+            },
+            {
+                "sub_category": "Collaboration Tools (Slack, Microsoft Teams)"
+            },
+            {
+                "sub_category": "Documentation (Confluence, Notion)"
+            },
+            {
+                "sub_category": "Agile Project Management"
+            },
+            {
+                "sub_category": "DevOps Practices"
+            },
+            {
+                "sub_category": "Remote Work Best Practices"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "area": "Gestione IT e Sicurezza Informatica",
+        "category": "Gestione delle Infrastrutture IT",
+        "sub_categories": []
+    }
+]

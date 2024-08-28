@@ -2,7 +2,7 @@
 #import packages.openfavs.classify.get_site_info_old as get_site_info_old
 from openai import AzureOpenAI, BadRequestError
 import get_site_info, web_control
-from load_json import main_cat, sub_cat
+from load_json import main_cat, sub_cat, area_categories
 from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
 from prompts.prompts import create_classify_prompt, create_reclassify_prompt
 
@@ -220,13 +220,13 @@ def main(args):
     if Web is None: Web = Website(args)
     
     url = args.get("url")
-    print('init MetaDataExtractor class')
+    #print('init MetaDataExtractor class')
     extractor = get_site_info.MetaDataExtractor(url)
 
     # @@ get the cats json object @@ #
 
     main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
-    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])     
+    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])
     
     description = extractor.get_description()
     html_content = extractor.get_html_content()
@@ -295,18 +295,16 @@ def main(args):
         
     #print(html_content)
     
-    prompt = create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str)
-    #print(prompt)
-    #print('prompt', request)
+    prompt = create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str)    
     classify = AI.asks_ai(prompt, Config.ROLE)
     json_object = extract_json(classify, 'str_to_obj')
-    my_string = extract_my_string(classify, 'my_string')
-    # Combina i risultati
-    
-    result = {**json_object, **my_string}
-    print(result)    
+    my_string = extract_my_string(classify, 'my_string')    
+    result = {**json_object, **my_string} # Combina i risultati
+    print(result)
+       
     reserved_words = ", ".join(Config.RESERVED_WORDS)
-    refining_prompt = create_reclassify_prompt(main_cat_str, sub_cat_str, reserved_words, my_string)
+    title = extractor.get_title()
+    refining_prompt = create_reclassify_prompt(my_string, sub_cat_str, description, title)
     re_classify = AI.asks_ai(refining_prompt, Config.SUPERVISOR_ROLE)   
     print(re_classify)
     

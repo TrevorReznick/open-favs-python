@@ -8,5 +8,6 @@ def load_json(file_path):
 # Carica i dati dal file JSON
 main_cat = load_json('json/main_cat.json')
 sub_cat = load_json('json/sub_cat.json')
+area_categories = load_json('json/areas_categories.json')
 
 
