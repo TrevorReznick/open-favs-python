@@ -1,5 +1,30 @@
 [
     {
+        "id": 999,
+        "area": "Sviluppo Software e DevOps",
+        "category": "Developer Comunity, Technical blog",
+        "sub_categories": [
+            {
+                "sub_category": "Tech Posts"
+            },
+            {
+                "sub_category": "Dev Tutorials"
+            },
+            {
+                "sub_category": "Dev Comunity"
+            },
+            {
+                "sub_category": "Code Challenges"
+            },
+            {
+                "sub_category": "Mailing Lists"
+            },
+            {
+                "sub_category": "AI and Developing World news"
+            }
+        ]
+    },
+    {
         "id": 1,
         "area": "Sviluppo Software e DevOps",
         "category": "Linguaggi di Programmazione e Paradigmi",

@@ -22,6 +22,31 @@ def crea_mappa_gerarchica(data):
     return mappa_gerarchica
 
 #def create_reclassify_prompt(main_cat_str, sub_cat_str, inspiration, my_string, areas):
+
+def refactor_classify_agent(my_string):
+    
+    res_obj = crea_mappa_gerarchica(area_categories)    
+    areas = ", ".join([f"{item['area']}" for item in area_categories])
+    categories = ", ".join([f"{item['category']}" for item in area_categories])
+    
+    prompt = f"""
+        Giving you a good chance that you will be able to read and understood the object/dictionary {res_obj}, 
+        that categorizes main content areas {areas} and providing a detailed framework for classification purposes 
+        with the ramifications of {categories}, can you find a suitable classification for the provided text {my_string}?
+        Give some tags, following the assumption that:
+        
+        1. First tag is the  area classification
+        2. Second tag is the main Category classification following the {categories} ramification by the area classification
+        3. Third and following tags (max 5) are conseguence of point nr. 2; if there are some other suitable categories, 
+            print out the new matched category and following ramification tag classification.
+        4. please, and motivate your logic.    
+    """
+        
+    return prompt
+    
+    
+    
+    
 def create_reclassify_prompt(my_string, sub_cat_string, description, title):
     
     # @@ get new areas and categories @@ #
@@ -69,9 +94,10 @@ def create_reclassify_prompt(my_string, sub_cat_string, description, title):
         2. For Task 2, provide the summary of your reasoning prefixed with 'my_string: '.
 
         Return the response as a string without spaces, prefixed with 'str_to_obj: ' followed by the JSON object string and the string of your notes of logic.
+        3. For Task 3, simply answear to this question: can you read this object/dictionary: {mappa_gerarchica}?
         Good luck!
     """
-    print('prompt: ', prompt)
+    #print('prompt: ', prompt)
     return prompt
 
 def create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str):

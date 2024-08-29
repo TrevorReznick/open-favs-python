@@ -4,7 +4,7 @@ from openai import AzureOpenAI, BadRequestError
 import get_site_info, web_control
 from load_json import main_cat, sub_cat, area_categories
 from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
-from prompts.prompts import create_classify_prompt, create_reclassify_prompt
+from prompts.prompts import create_classify_prompt, create_reclassify_prompt, refactor_classify_agent
 
 class Config:
     #MODEL = "gpt-4"ss  
@@ -214,7 +214,7 @@ def main(args):
 
     global AI, Web
 
-    print('into main')
+    #print('into main')
     
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
@@ -233,7 +233,8 @@ def main(args):
 
     #
     if(description):
-        print('description exists :', description)
+        #print('description exists :', description)
+        a = 1
     else: 
         print('description not exists!')
 
@@ -247,11 +248,11 @@ def main(args):
 
     # 1. Suddividi la frase in sottofrasi
     sub_phrases = split_sentence(description)
-    print(f"Sub-phrases: {sub_phrases}")
+    #print(f"Sub-phrases: {sub_phrases}")
 
     # 2. Crea un dizionario delle sottofrasi
     phrases_dict = create_phrases_dict(sub_phrases)
-    print(f"Phrases dictionary: {phrases_dict}")
+    #print(f"Phrases dictionary: {phrases_dict}")
 
     suggestions_found = {}
     suggestion = ""
@@ -269,7 +270,7 @@ def main(args):
             suggestion_1 = [list(d.values())[0] for d in suggestion_]
             #print('suggestion', suggestion)
             suggestion = (" ".join(suggestion_1))
-            print('suggestion', suggestion)
+            #print('suggestion', suggestion)
         else:
             print('nessuna suggestion trovata')
 
@@ -300,13 +301,18 @@ def main(args):
     json_object = extract_json(classify, 'str_to_obj')
     my_string = extract_my_string(classify, 'my_string')    
     result = {**json_object, **my_string} # Combina i risultati
-    print(result)
+    #print(result)
        
     reserved_words = ", ".join(Config.RESERVED_WORDS)
     title = extractor.get_title()
     refining_prompt = create_reclassify_prompt(my_string, sub_cat_str, description, title)
     re_classify = AI.asks_ai(refining_prompt, Config.SUPERVISOR_ROLE)   
-    print(re_classify)
+    #print(re_classify)
+    
+    refactor_prompt = refactor_classify_agent(my_string)
+    re_re_classify = AI.asks_ai(refactor_prompt, Config.SUPERVISOR_ROLE)
+    print('hello, refactor prompt!')
+    print(re_re_classify)
     
     return {
         "body": Web.get_request(args)
