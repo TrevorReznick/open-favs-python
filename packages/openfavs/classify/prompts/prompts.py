@@ -23,23 +23,58 @@ def crea_mappa_gerarchica(data):
 
 #def create_reclassify_prompt(main_cat_str, sub_cat_str, inspiration, my_string, areas):
 
-def refactor_classify_agent(my_string):
+def refactor_classify_agent(my_string, title, description):
     
     res_obj = crea_mappa_gerarchica(area_categories)    
     areas = ", ".join([f"{item['area']}" for item in area_categories])
     categories = ", ".join([f"{item['category']}" for item in area_categories])
     
+    
     prompt = f"""
-        Giving you a good chance that you will be able to read and understood the object/dictionary {res_obj}, 
-        that categorizes main content areas {areas} and providing a detailed framework for classification purposes 
-        with the ramifications of {categories}, can you find a suitable classification for the provided text {my_string}?
-        Give some tags, following the assumption that:
+    
+        **Task 1**:
         
-        1. First tag is the  area classification
-        2. Second tag is the main Category classification following the {categories} ramification by the area classification
-        3. Third and following tags (max 5) are conseguence of point nr. 2; if there are some other suitable categories, 
-            print out the new matched category and following ramification tag classification.
-        4. please, and motivate your logic.    
+        You should examine some website elements and give a classification respecting the tree of {res_obj};
+        1. you will examinate first {title}, to undestand if it matchs with area list - {areas} - and categories list - {categories} - 
+        2. you will examinate after {description}, to undestand if it matchs with area list - {areas} - and categories list - {categories} -
+        3. as help for your tasks, we have a raw expalation text - {my_string} - with wich you will also understand if it matchs with area list - {areas} - and categories list - {categories} -
+        4. well undestood the classification of the elements of points above, you will determitate exactly 5 tags in the followin way:
+        
+        1. select the most relevant main category as first tag;
+        2. from the main associated categories, choose the most relevant category;
+        3. from the categories associated sub category list, choose the most relevant sub-category as third tag;                
+        4. you may select additional sub-categories the for the 4th and 5th tag             
+        **Task 2**: 
+        
+        Argue the choices you have made, summarizing your reasoning as if it were 'your description' reworked for knowledge purposes.         
+        Start your summary with expressions such as 'The content was detected as...' or 'The resource provided belongs to the category...'. 
+        Make the best use of your knowledge.        
+        You should structure your answer by splitting the strict answer (Task 1) and the elaborated description (Task 2) using these rules:
+        
+        1. use a JSON object with this shape:
+        
+        {{
+            'tag_1': selected_tag_1, 
+            'tag_2': selected_tag_2, 
+            'tag_3': selected_tag_3, 
+            'tag_4': selected_tag_4,
+            'tag_5': selected_tag_5
+        }}
+
+        2. For Task 2, provide a string, in conversional mode, with the summary of your reasoning prefixed with 'my_string: ' - your notes of logic -.
+        
+        3. so this should have to be the final obj:
+        
+        {{
+            'tag_1': selected_tag_1, 
+            'tag_2': selected_tag_2, 
+            'tag_3': selected_tag_3, 
+            'tag_4': selected_tag_4,
+            'tag_5': selected_tag_5,
+            'my_string': notes of logic
+        }}        
+        
+        Good luck!       
     """
         
     return prompt

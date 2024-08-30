@@ -42,8 +42,8 @@ def extract_my_string(output, prefix):
     analysis_match = re.search(analysis_pattern, output)
     if analysis_match:
         AI_analysis = analysis_match.group(1)
-        print("\nContenuto di my_string:")
-        print(AI_analysis)
+        #print("\nContenuto di my_string:")
+        #print(AI_analysis)
         return {'AI_analysis': AI_analysis}
     else:
         print("Nessun contenuto my_string trovato.")
@@ -103,7 +103,7 @@ def find_partial_matches_nested(input_phrase, dictionary, threshold=0.8):
     matches = list(set(matches))
     matches.sort(key=lambda x: SequenceMatcher(None, input_phrase, ' '.join(x[1])).ratio(), reverse=True)
     
-    print(f"Final matches: {matches}")  # Debug: Mostra i risultati finali
+    #print(f"Final matches: {matches}")  # Debug: Mostra i risultati finali
     return matches
 
 """
@@ -171,30 +171,30 @@ def find_partial_matches_new(input_phrase, dictionary, threshold=0.8):
 def find_partial_matches(input_phrase, dictionary, threshold=0.8):
     matches = []
     words = set(input_phrase.split())
-    print(f"Input phrase words: {words}")  # Debug: Mostra le parole nella frase di input
+    #print(f"Input phrase words: {words}")  # Debug: Mostra le parole nella frase di input
 
     for key, value in dictionary.items():
         key_words = set(key.split())
-        print(f"Checking key: '{key}' with words: {key_words}")  # Debug: Mostra la chiave e le sue parole
+        #print(f"Checking key: '{key}' with words: {key_words}")  # Debug: Mostra la chiave e le sue parole
         
         # Verifica che tutte le parole della chiave siano presenti nella descrizione
         if not key_words.issubset(words):
-            print(f"Key '{key}' does not match because not all words are present in the description.")
+            #print(f"Key '{key}' does not match because not all words are present in the description.")
             continue  # Salta se la chiave contiene parole non presenti nella description
         
         # Controlla l'intera frase rispetto alla chiave
         similarity_full_phrase = SequenceMatcher(None, input_phrase, key).ratio()
-        print(f"Similarity with full phrase for key '{key}': {similarity_full_phrase}")  # Debug: Similarità con la frase intera
+        #print(f"Similarity with full phrase for key '{key}': {similarity_full_phrase}")  # Debug: Similarità con la frase intera
         
         if similarity_full_phrase >= threshold:
-            print(f"Key '{key}' matches with full phrase (similarity: {similarity_full_phrase})")
+            #print(f"Key '{key}' matches with full phrase (similarity: {similarity_full_phrase})")
             matches.append((key, value))
             continue
         
         # Controlla ogni parola separatamente
         for word in words:
             similarity = SequenceMatcher(None, word, key).ratio()
-            print(f"Similarity with word '{word}' for key '{key}': {similarity}")  # Debug: Similarità con ogni parola
+            #print(f"Similarity with word '{word}' for key '{key}': {similarity}")  # Debug: Similarità con ogni parola
             if similarity >= threshold:
                 print(f"Key '{key}' matches with word '{word}' (similarity: {similarity})")
                 matches.append((key, value))
@@ -204,7 +204,7 @@ def find_partial_matches(input_phrase, dictionary, threshold=0.8):
     matches = list(set(matches))
     matches.sort(key=lambda x: SequenceMatcher(None, input_phrase, x[0]).ratio(), reverse=True)
     
-    print(f"Final matches: {matches}")  # Debug: Mostra i risultati finali
+    #print(f"Final matches: {matches}")  # Debug: Mostra i risultati finali
     return matches
 
 def find_partial_matches_old1(input_phrase, dictionary, threshold=0.8):

@@ -1,30 +1,5 @@
 [
     {
-        "id": 999,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Developer Comunity, Technical blog",
-        "sub_categories": [
-            {
-                "sub_category": "Tech Posts"
-            },
-            {
-                "sub_category": "Dev Tutorials"
-            },
-            {
-                "sub_category": "Dev Comunity"
-            },
-            {
-                "sub_category": "Code Challenges"
-            },
-            {
-                "sub_category": "Mailing Lists"
-            },
-            {
-                "sub_category": "AI and Developing World news"
-            }
-        ]
-    },
-    {
         "id": 1,
         "area": "Sviluppo Software e DevOps",
         "category": "Linguaggi di Programmazione e Paradigmi",
@@ -480,6 +455,66 @@
         "id": 13,
         "area": "Gestione IT e Sicurezza Informatica",
         "category": "Gestione delle Infrastrutture IT",
+        "sub_categories": []
+    },
+    {
+        "id": 14,
+        "area": "Intelligenza Artificiale, Data Science e Big Data",
+        "category": "Tecnologie e metodologie per l'analisi dei dati",
+        "sub_categories": []
+    },
+    {
+        "id": 15,
+        "area": "Intelligenza Artificiale, Data Science e Big Data",
+        "category": "Apprendimento automatico",
+        "sub_categories": []
+    },
+    {
+        "id": 16,
+        "area": "Intelligenza Artificiale, Data Science e Big Data",
+        "category": "Gestione ed elaborazione di grandi volumi di dati",
+        "sub_categories": []
+    },
+    {
+        "id": 17,
+        "area": "Blockchain e Tecnologie Distribuite",
+        "category": "Sistemi decentralizzati e blockchain  ",
+        "sub_categories": []
+    },
+    {
+        "id": 18,
+        "area": "Blockchain e Tecnologie Distribuite",
+        "category": "Smart contracts",
+        "sub_categories": []
+    },
+    {
+        "id": 19,
+        "area": "Blockchain e Tecnologie Distribuite",
+        "category": "Criptovalute e tecnologie distribuite per la sicurezza e la trasparenza delle transazioni",
+        "sub_categories": []
+    },
+    {
+        "id": 20,
+        "area": "IoT, Edge Computing e Cloud Computing",
+        "category": "Sistemi e architetture per l'Internet delle Cose",
+        "sub_categories": []
+    },
+    {
+        "id": 21,
+        "area": "IoT, Edge Computing e Cloud Computing",
+        "category": "Calcolo distribuito",
+        "sub_categories": []
+    },
+    {
+        "id": 22,
+        "area": "IoT, Edge Computing e Cloud Computing",
+        "category": "Cloud computing ",
+        "sub_categories": []
+    },
+    {
+        "id": 23,
+        "area": "IoT, Edge Computing e Cloud Computing",
+        "category": "Virtualizzazione per la scalabilità e l'efficienza delle risorse IT",
         "sub_categories": []
     }
 ]

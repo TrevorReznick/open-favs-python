@@ -309,7 +309,7 @@ def main(args):
     re_classify = AI.asks_ai(refining_prompt, Config.SUPERVISOR_ROLE)   
     #print(re_classify)
     
-    refactor_prompt = refactor_classify_agent(my_string)
+    refactor_prompt = refactor_classify_agent(my_string, title, description)
     re_re_classify = AI.asks_ai(refactor_prompt, Config.SUPERVISOR_ROLE)
     print('hello, refactor prompt!')
     print(re_re_classify)
