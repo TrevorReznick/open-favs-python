@@ -295,26 +295,30 @@ def main(args):
         print('debug soup results: ', extractor.get_html_content())
         
     #print(html_content)
+
+    returned_obj = Web.get_request(args)
     
     prompt = create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str)    
     classify = AI.asks_ai(prompt, Config.ROLE)
     json_object = extract_json(classify, 'str_to_obj')
-    my_string = extract_my_string(classify, 'my_string')    
+    my_string = extract_my_string(classify, 'my_string')
     result = {**json_object, **my_string} # Combina i risultati
-    #print(result)
+    print('first propmt: ', classify)
        
     reserved_words = ", ".join(Config.RESERVED_WORDS)
     title = extractor.get_title()
     refining_prompt = create_reclassify_prompt(my_string, sub_cat_str, description, title)
     re_classify = AI.asks_ai(refining_prompt, Config.SUPERVISOR_ROLE)   
-    #print(re_classify)
+    print('second prompt: ', re_classify)    
     
-    refactor_prompt = refactor_classify_agent(my_string, title, description)
+    name = returned_obj.get('name')
+    refactor_prompt = refactor_classify_agent(my_string, name, title, description)
     re_re_classify = AI.asks_ai(refactor_prompt, Config.SUPERVISOR_ROLE)
     print('hello, refactor prompt!')
-    print(re_re_classify)
+    print('third prompt: ', re_re_classify)
     
+
     return {
-        "body": Web.get_request(args)
+        "body": returned_obj
     }
      

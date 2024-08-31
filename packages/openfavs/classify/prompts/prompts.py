@@ -23,7 +23,7 @@ def crea_mappa_gerarchica(data):
 
 #def create_reclassify_prompt(main_cat_str, sub_cat_str, inspiration, my_string, areas):
 
-def refactor_classify_agent(my_string, title, description):
+def refactor_classify_agent(my_string, title, description, name):
     
     res_obj = crea_mappa_gerarchica(area_categories)    
     areas = ", ".join([f"{item['area']}" for item in area_categories])
@@ -43,11 +43,12 @@ def refactor_classify_agent(my_string, title, description):
         1. select the most relevant main category as first tag;
         2. from the main associated categories, choose the most relevant category;
         3. from the categories associated sub category list, choose the most relevant sub-category as third tag;                
-        4. you may select additional sub-categories the for the 4th and 5th tag             
+        4. you may select additional sub-categories the for the 4th and 5th tag 
+
         **Task 2**: 
         
         Argue the choices you have made, summarizing your reasoning as if it were 'your description' reworked for knowledge purposes.         
-        Start your summary with expressions such as 'The content was detected as...' or 'The resource provided belongs to the category...'. 
+        Start your summary using the name - {name} - capitalized (i.e. the site #name# is... the site #name# belongs to... the site #name# concern.. etc)
         Make the best use of your knowledge.        
         You should structure your answer by splitting the strict answer (Task 1) and the elaborated description (Task 2) using these rules:
         

@@ -30,6 +30,7 @@ def extract_json(output, prefix):
         return {'json_data': None}
 
 def extract_my_string(output, prefix):
+    
     """
     Estrae il contenuto di 'my_string' basato su un prefisso specificato.
 
@@ -47,87 +48,7 @@ def extract_my_string(output, prefix):
         return {'AI_analysis': AI_analysis}
     else:
         print("Nessun contenuto my_string trovato.")
-        return {'AI_analysis': None}    
-    
-
-
-def find_partial_matches_nested(input_phrase, dictionary, threshold=0.8):
-    matches = []
-    words = set(input_phrase.split())
-    print(f"Input phrase words: {words}")  # Debug: Mostra le parole nella frase di input
-
-    def recursive_search(current_dict, parent_keys=[]):
-        for key, value in current_dict.items():
-            key_words = set(key.split())
-            print(f"Checking key: '{key}' with words: {key_words}")  # Debug: Mostra la chiave e le sue parole
-
-            # Verifica che tutte le parole della chiave siano presenti nella descrizione
-            if not key_words.issubset(words):
-                print(f"Key '{key}' does not match because not all words are present in the description.")
-                continue  # Salta se la chiave contiene parole non presenti nella description
-            
-            # Controlla l'intera frase rispetto alla chiave
-            similarity_full_phrase = SequenceMatcher(None, input_phrase, key).ratio()
-            print(f"Similarity with full phrase for key '{key}': {similarity_full_phrase}")  # Debug: Similarità con la frase intera
-            
-            if similarity_full_phrase >= threshold:
-                print(f"Key '{key}' matches with full phrase (similarity: {similarity_full_phrase})")
-                matches.append((key, parent_keys + [key], value))
-                continue
-
-            # Controlla ogni parola separatamente
-            for word in words:
-                similarity = SequenceMatcher(None, word, key).ratio()
-                print(f"Similarity with word '{word}' for key '{key}': {similarity}")  # Debug: Similarità con ogni parola
-                if similarity >= threshold:
-                    print(f"Key '{key}' matches with word '{word}' (similarity: {similarity})")
-                    matches.append((key, parent_keys + [key], value))
-                    break  # Evita duplicati aggiuntivi
-            
-            # Se il valore è un altro dizionario, continua la ricerca ricorsiva
-            if isinstance(value, dict):
-                recursive_search(value, parent_keys + [key])
-            # Se il valore è una lista, cerca corrispondenze nelle sotto-categorie
-            elif isinstance(value, list):
-                for item in value:
-                    if isinstance(item, str):
-                        similarity = SequenceMatcher(None, input_phrase, item).ratio()
-                        if similarity >= threshold:
-                            matches.append((item, parent_keys + [key], item))
-                            break
-
-    # Inizia la ricerca ricorsiva dalla radice del dizionario
-    recursive_search(dictionary)
-
-    # Rimuove duplicati e ordina per similarità se necessario
-    matches = list(set(matches))
-    matches.sort(key=lambda x: SequenceMatcher(None, input_phrase, ' '.join(x[1])).ratio(), reverse=True)
-    
-    #print(f"Final matches: {matches}")  # Debug: Mostra i risultati finali
-    return matches
-
-"""
-# Esempio di utilizzo
-matches = find_partial_matches(title, mappa_gerarchica)
-# Output delle corrispondenze trovate
-print("Corrispondenze trovate:")
-for match in matches:
-    print(f"Matched: {match[0]}, Path: {' > '.join(match[1])}")
-#print(mappa_gerarchica_string)
-"""
-
-def find_partial_matches_old(input_phrase, dictionary, threshold=0.8):
-        matches = []
-        words = input_phrase.split()
-        for key, value in dictionary.items():
-            for word in words:
-                if word in key:
-                    matches.append((key, value))
-                else:
-                    similarity = SequenceMatcher(None, word, key).ratio()
-                    if similarity >= threshold:
-                        matches.append((key, value))
-        return matches
+        return {'AI_analysis': None}
 
 def split_sentence(sentence):
     # Usa una regex per separare la frase su ', ', ' and ', ';' e altri separatori
@@ -206,6 +127,84 @@ def find_partial_matches(input_phrase, dictionary, threshold=0.8):
     
     #print(f"Final matches: {matches}")  # Debug: Mostra i risultati finali
     return matches
+
+def find_partial_matches_nested(input_phrase, dictionary, threshold=0.8):
+    matches = []
+    words = set(input_phrase.split())
+    print(f"Input phrase words: {words}")  # Debug: Mostra le parole nella frase di input
+
+    def recursive_search(current_dict, parent_keys=[]):
+        for key, value in current_dict.items():
+            key_words = set(key.split())
+            print(f"Checking key: '{key}' with words: {key_words}")  # Debug: Mostra la chiave e le sue parole
+
+            # Verifica che tutte le parole della chiave siano presenti nella descrizione
+            if not key_words.issubset(words):
+                print(f"Key '{key}' does not match because not all words are present in the description.")
+                continue  # Salta se la chiave contiene parole non presenti nella description
+            
+            # Controlla l'intera frase rispetto alla chiave
+            similarity_full_phrase = SequenceMatcher(None, input_phrase, key).ratio()
+            print(f"Similarity with full phrase for key '{key}': {similarity_full_phrase}")  # Debug: Similarità con la frase intera
+            
+            if similarity_full_phrase >= threshold:
+                print(f"Key '{key}' matches with full phrase (similarity: {similarity_full_phrase})")
+                matches.append((key, parent_keys + [key], value))
+                continue
+
+            # Controlla ogni parola separatamente
+            for word in words:
+                similarity = SequenceMatcher(None, word, key).ratio()
+                print(f"Similarity with word '{word}' for key '{key}': {similarity}")  # Debug: Similarità con ogni parola
+                if similarity >= threshold:
+                    print(f"Key '{key}' matches with word '{word}' (similarity: {similarity})")
+                    matches.append((key, parent_keys + [key], value))
+                    break  # Evita duplicati aggiuntivi
+            
+            # Se il valore è un altro dizionario, continua la ricerca ricorsiva
+            if isinstance(value, dict):
+                recursive_search(value, parent_keys + [key])
+            # Se il valore è una lista, cerca corrispondenze nelle sotto-categorie
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, str):
+                        similarity = SequenceMatcher(None, input_phrase, item).ratio()
+                        if similarity >= threshold:
+                            matches.append((item, parent_keys + [key], item))
+                            break
+
+    # Inizia la ricerca ricorsiva dalla radice del dizionario
+    recursive_search(dictionary)
+
+    # Rimuove duplicati e ordina per similarità se necessario
+    matches = list(set(matches))
+    matches.sort(key=lambda x: SequenceMatcher(None, input_phrase, ' '.join(x[1])).ratio(), reverse=True)
+    
+    #print(f"Final matches: {matches}")  # Debug: Mostra i risultati finali
+    return matches
+
+"""
+# Esempio di utilizzo
+matches = find_partial_matches(title, mappa_gerarchica)
+# Output delle corrispondenze trovate
+print("Corrispondenze trovate:")
+for match in matches:
+    print(f"Matched: {match[0]}, Path: {' > '.join(match[1])}")
+#print(mappa_gerarchica_string)
+"""
+
+def find_partial_matches_old(input_phrase, dictionary, threshold=0.8):
+        matches = []
+        words = input_phrase.split()
+        for key, value in dictionary.items():
+            for word in words:
+                if word in key:
+                    matches.append((key, value))
+                else:
+                    similarity = SequenceMatcher(None, word, key).ratio()
+                    if similarity >= threshold:
+                        matches.append((key, value))
+        return matches
 
 def find_partial_matches_old1(input_phrase, dictionary, threshold=0.8):
 
