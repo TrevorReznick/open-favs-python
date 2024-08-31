@@ -298,29 +298,18 @@ def main(args):
 
     returned_obj = Web.get_request(args)    
     
-    prompt = create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str)    
-    classify = AI.asks_ai(prompt, Config.ROLE)
-    json_object = extract_json(classify, 'str_to_obj')
-    my_string = extract_my_string(classify, 'my_string')
-    result = {**json_object, **my_string} # Combina i risultati
-    #print('first propmt: ', classify)
+    #json_object = extract_json(classify, 'str_to_obj')
+    #my_string = extract_my_string(classify, 'my_string')
+    #result = {**json_object, **my_string} # Combina i risultati    
        
     reserved_words = ", ".join(Config.RESERVED_WORDS)
     title = extractor.get_title()
-    refining_prompt = create_reclassify_prompt(my_string, sub_cat_str, description, title)
-    re_classify = AI.asks_ai(refining_prompt, Config.SUPERVISOR_ROLE)   
-    #print('second prompt: ', re_classify)    
-    
-    name = returned_obj.get('name')
-    refactor_prompt = refactor_classify_agent(my_string, name, title, description, html_content)
-    re_re_classify = AI.asks_ai(refactor_prompt, Config.SUPERVISOR_ROLE)
-    #print('hello, refactor prompt!')
-    #print('third prompt: ', re_re_classify)
+    name = returned_obj.get('name')   
 
     my_prompt = create_summarize_prompt(name, title, description, html_content)
 
     summarize = AI.asks_ai(my_prompt, Config.ROLE)
-    print(summarize)
+    #print(summarize)
 
     last_refactored_prompt = last_classify_agent(summarize, name)
     last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
