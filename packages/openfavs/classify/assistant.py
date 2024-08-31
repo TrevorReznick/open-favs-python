@@ -238,47 +238,7 @@ def main(args):
     else: 
         print('description not exists!')
 
-    # @@ testing find similarities and spli sentences @@ #
-
-    """matches = find_partial_matches(description, Config.SUGGESTIONS)
-
-    for match in matches:
-        print(f"Found match: {match[0]} -> {match[1]}")
-    """
-
-    # 1. Suddividi la frase in sottofrasi
-    sub_phrases = split_sentence(description)
-    #print(f"Sub-phrases: {sub_phrases}")
-
-    # 2. Crea un dizionario delle sottofrasi
-    phrases_dict = create_phrases_dict(sub_phrases)
-    #print(f"Phrases dictionary: {phrases_dict}")
-
-    suggestions_found = {}
-    suggestion = ""
-
-
-    
-    for idx, sub_phrase in phrases_dict.items():
-
-        matches = find_partial_matches_new(sub_phrase, Config.SUGGESTIONS)
-
-        formatted_matches = [{k: v} for k, v in matches]
-
-        if formatted_matches:  # Aggiungi solo se ci sono match
-            suggestion_ = suggestions_found[sub_phrase] = formatted_matches
-            suggestion_1 = [list(d.values())[0] for d in suggestion_]
-            #print('suggestion', suggestion)
-            suggestion = (" ".join(suggestion_1))
-            #print('suggestion', suggestion)
-        else:
-            print('nessuna suggestion trovata')
-
-
-        """if(matches):
-            print(f"Matches for sub-phrase '{sub_phrase}': {matches}")
-        else:
-            print('nessuna suggestion trovata')"""
+   
     
     # @@ prod flow @@ #
 
