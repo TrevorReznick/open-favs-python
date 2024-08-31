@@ -4,7 +4,7 @@ from openai import AzureOpenAI, BadRequestError
 import get_site_info, web_control
 from load_json import main_cat, sub_cat, area_categories
 from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
-from prompts.prompts import create_classify_prompt, create_reclassify_prompt, refactor_classify_agent
+from prompts.prompts import create_classify_prompt, create_reclassify_prompt, refactor_classify_agent, create_summarize_prompt, last_classify_agent
 
 class Config:
     #MODEL = "gpt-4"ss  
@@ -296,26 +296,35 @@ def main(args):
         
     #print(html_content)
 
-    returned_obj = Web.get_request(args)
+    returned_obj = Web.get_request(args)    
     
     prompt = create_classify_prompt(main_cat_str, description, suggestion, sub_cat_str)    
     classify = AI.asks_ai(prompt, Config.ROLE)
     json_object = extract_json(classify, 'str_to_obj')
     my_string = extract_my_string(classify, 'my_string')
     result = {**json_object, **my_string} # Combina i risultati
-    print('first propmt: ', classify)
+    #print('first propmt: ', classify)
        
     reserved_words = ", ".join(Config.RESERVED_WORDS)
     title = extractor.get_title()
     refining_prompt = create_reclassify_prompt(my_string, sub_cat_str, description, title)
     re_classify = AI.asks_ai(refining_prompt, Config.SUPERVISOR_ROLE)   
-    print('second prompt: ', re_classify)    
+    #print('second prompt: ', re_classify)    
     
     name = returned_obj.get('name')
-    refactor_prompt = refactor_classify_agent(my_string, name, title, description)
+    refactor_prompt = refactor_classify_agent(my_string, name, title, description, html_content)
     re_re_classify = AI.asks_ai(refactor_prompt, Config.SUPERVISOR_ROLE)
-    print('hello, refactor prompt!')
-    print('third prompt: ', re_re_classify)
+    #print('hello, refactor prompt!')
+    #print('third prompt: ', re_re_classify)
+
+    my_prompt = create_summarize_prompt(name, title, description, html_content)
+
+    summarize = AI.asks_ai(my_prompt, Config.ROLE)
+    print(summarize)
+
+    last_refactored_prompt = last_classify_agent(summarize, name)
+    last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
+    print('new_response: ', last_ai_request)
     
 
     return {
