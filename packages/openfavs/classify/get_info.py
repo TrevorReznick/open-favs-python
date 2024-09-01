@@ -20,6 +20,7 @@ class Config:
     }
 
     METADATA = {
+        'name': None,
         'title': None,
         'description': None,
         'canonical': None,
