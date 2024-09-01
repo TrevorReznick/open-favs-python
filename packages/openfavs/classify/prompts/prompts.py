@@ -1,7 +1,12 @@
 
 import json
-from load_json import area_categories
-from difflib import SequenceMatcher
+from load_json import area_categories, main_cat, sub_cat
+#from difflib import SequenceMatcher
+
+# @@ get the cats json object @@ #
+
+main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
+sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])
 
 def crea_mappa_gerarchica(data):
     mappa_gerarchica = {}

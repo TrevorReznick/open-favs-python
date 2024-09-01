@@ -1,7 +1,7 @@
 
 #import packages.openfavs.classify.get_site_info_old as get_site_info_old
 from openai import AzureOpenAI, BadRequestError
-import get_site_info, web_control
+import get_site_info, web_control, get_info
 from load_json import main_cat, sub_cat, area_categories
 from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
 from prompts.prompts import create_summarize_prompt, last_classify_agent
@@ -207,6 +207,11 @@ class Website:
         metadata_obj = json.loads(json_metadata)            
         return metadata_obj
 
+    def get_request_new(self, args):
+        self.url = args.get("url") 
+        extractor = get_info.MetaDataExtractorNew(args.get("url"))
+        print(extractor.extract_metadata())
+
 AI = None
 Web = None
 
@@ -221,12 +226,7 @@ def main(args):
     
     url = args.get("url")
     #print('init MetaDataExtractor class')
-    extractor = get_site_info.MetaDataExtractor(url)
-
-    # @@ get the cats json object @@ #
-
-    main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
-    sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])
+    extractor = get_site_info.MetaDataExtractor(url)    
     
     description = extractor.get_description()
     html_content = extractor.get_html_content()
@@ -274,6 +274,7 @@ def main(args):
     last_refactored_prompt = last_classify_agent(summarize, name)
     last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
     print('new_response: ', last_ai_request)
+    Web.get_request_new(args)
     
 
     return {

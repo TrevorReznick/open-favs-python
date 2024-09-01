@@ -44,6 +44,8 @@ class MetaDataExtractor:
         except requests.exceptions.RequestException as e:
             print(f"Errore durante la richiesta HTTP: {e}")
             return None
+        
+        
     def extract_all_metadata(self): 
 
         if not self.soup:
