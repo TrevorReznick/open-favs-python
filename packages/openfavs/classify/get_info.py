@@ -71,7 +71,7 @@ class MetaDataExtractorNew:
             print(f"Errore durante la richiesta HTTP: {e}")
             return None
         
-    def get_meta_tag(self, name=None, property=None, charset=False):
+    def get_meta_tag(self, name=None, property=None, charset=False): # utity function prende i metadati in base agli argomenti
 
         if not self.soup:
             return None
@@ -96,13 +96,16 @@ class MetaDataExtractorNew:
         
         return None
     
-    def medatata_extractor(self):
+    def medatata_extractor(self): #analizza il contenuto del sito e popola oggetto metadata        
 
         for key in Config.METADATA:
+            
             if key.startswith('og:'):
-                Config.METADATA[key] = self.get_meta_tag(property=key)
+                Config.METADATA[key] = self.get_meta_tag(property=key)              
+                                
             elif key.startswith('twitter:'):
                 Config.METADATA[key] = self.get_meta_tag(property=key)
+                
             else:
                 # Gestione speciale per 'charset'
                 if key == 'charset':
@@ -113,23 +116,10 @@ class MetaDataExtractorNew:
 
         return
     
-    """
-    def no_metadata(self):
-        # Fallback per il titolo
-        if not Config.METADATA['title']:
-            Config.METADATA['title'] = self.get_title() or "Titolo predefinito"
-        
-        # Fallback per la descrizione
-        if not Config.METADATA['description']:
-            Config.METADATA['description'] = "Descrizione predefinita"
-        
-       
-        
-        # Aggiungi altri fallback secondo necessita
-    """
     
     
-    def extract_metadata(self): 
+    
+    def extract_metadata(self): #prende i metadata e restituisce oggetto solo se valori non sono nulli
 
         if not self.soup:
             return {}

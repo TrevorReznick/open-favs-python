@@ -66,29 +66,7 @@ class MetaDataExtractor:
         
         return {k: v for k, v in metadata.items() if v is not None}
     
-    def get_html_content(self):
-
-        if not self.soup:
-            print('debug, self soup: ', None)
-            return None
-
-        for element in self.soup(['nav', 'footer', 'header']):
-            element.decompose()
-            
-        paragraphs = self.soup.find_all('p')
-        all_text = []
-        
-        for p in paragraphs:
-            text = p.get_text().strip()
-            all_text.append(text)
-        
-        if not all_text:
-
-            print("Nessun testo trovato nei paragrafi.")
-            return None
-        
-        # Restituisce una singola stringa che unisce tutti i paragrafi con una nuova linea tra di essi
-        return "\n\n".join(all_text)   
+    
     
     def get_meta_tag(self, name=None, property=None):
 
@@ -109,36 +87,6 @@ class MetaDataExtractor:
         
         return None
     
-    def get_name_by_host(self):
-        url = self.url
-        parsed_url = urlparse(url)
-        hostname = parsed_url.hostname
-        
-        # Lista dei sottodomini comuni da rimuovere
-        common_subdomains = ['www', 'api', 'mail', 'ftp', 'blog', 'shop', 'dev', 'staging', 'test', 'm', 'cdn']
-
-        # Rimozione dei sottodomini comuni
-        for subdomain in common_subdomains:
-            if hostname.startswith(f"{subdomain}."):
-                hostname = hostname[len(subdomain) + 1:]
-                break  # Rompe il ciclo dopo aver rimosso il primo sottodominio trovato
-            
-        # Split del dominio per ottenere la parte principale
-        domain_parts = hostname.split('.')
-        
-        # Restituisce la prima parte del dominio, con la prima lettera maiuscola
-        return domain_parts[0].capitalize()
-    
-    def get_name_by_host_old(self):
-        url = self.url
-        parsed_url = urlparse(url)
-        hostname = parsed_url.hostname
-        if hostname.startswith("www."):
-            hostname = hostname[4:]            
-            #print(hostname)
-            domain_parts = hostname.split('.')
-            return domain_parts[0].capitalize()
-    
     # @@@ return object  @@@        
            
     
@@ -157,6 +105,7 @@ class MetaDataExtractor:
         # @@ Itera sui metadati estratti @@
         
         for key, value in metadata.items():
+            
             if Config.is_excluded(value):
                 print(f"Il valore '{value}' per '{key}' è escluso.")
                 continue
@@ -226,7 +175,51 @@ class MetaDataExtractor:
             return self.format_string(title_tag.string)
         
         # Se non viene trovato nulla di valido, restituisce None
-        return None    
+        return None
+    
+    def get_html_content(self):
+
+        if not self.soup:
+            print('debug, self soup: ', None)
+            return None
+
+        for element in self.soup(['nav', 'footer', 'header']):
+            element.decompose()
+            
+        paragraphs = self.soup.find_all('p')
+        all_text = []
+        
+        for p in paragraphs:
+            text = p.get_text().strip()
+            all_text.append(text)
+        
+        if not all_text:
+
+            print("Nessun testo trovato nei paragrafi.")
+            return None
+        
+        # Restituisce una singola stringa che unisce tutti i paragrafi con una nuova linea tra di essi
+        return "\n\n".join(all_text)   
+    
+    def get_name_by_host(self):
+        url = self.url
+        parsed_url = urlparse(url)
+        hostname = parsed_url.hostname
+        
+        # Lista dei sottodomini comuni da rimuovere
+        common_subdomains = ['www', 'api', 'mail', 'ftp', 'blog', 'shop', 'dev', 'staging', 'test', 'm', 'cdn']
+
+        # Rimozione dei sottodomini comuni
+        for subdomain in common_subdomains:
+            if hostname.startswith(f"{subdomain}."):
+                hostname = hostname[len(subdomain) + 1:]
+                break  # Rompe il ciclo dopo aver rimosso il primo sottodominio trovato
+            
+        # Split del dominio per ottenere la parte principale
+        domain_parts = hostname.split('.')
+        
+        # Restituisce la prima parte del dominio, con la prima lettera maiuscola
+        return domain_parts[0].capitalize() 
     
     def get_canonical_link(self):
 
