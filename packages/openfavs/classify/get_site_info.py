@@ -44,6 +44,25 @@ class MetaDataExtractor:
         except requests.exceptions.RequestException as e:
             print(f"Errore durante la richiesta HTTP: {e}")
             return None
+    
+    def get_meta_tag(self, name=None, property=None):
+
+        if not self.soup:
+            return None
+        
+        if name:
+            tag = self.soup.find('meta', attrs={'name': name})
+
+        elif property:
+            tag = self.soup.find('meta', attrs={'property': property})
+
+        else:
+            return None
+
+        if tag and 'content' in tag.attrs:
+            return tag['content']
+        
+        return None
         
         
     def extract_all_metadata(self): 
@@ -68,24 +87,7 @@ class MetaDataExtractor:
     
     
     
-    def get_meta_tag(self, name=None, property=None):
-
-        if not self.soup:
-            return None
-        
-        if name:
-            tag = self.soup.find('meta', attrs={'name': name})
-
-        elif property:
-            tag = self.soup.find('meta', attrs={'property': property})
-
-        else:
-            return None
-
-        if tag and 'content' in tag.attrs:
-            return tag['content']
-        
-        return None
+    
     
     # @@@ return object  @@@        
            

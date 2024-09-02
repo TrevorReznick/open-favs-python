@@ -19,12 +19,22 @@ class Config:
         None: True,
     }
 
-    METADATA = {
+    METADATA_NEW = {
         'name': None,
         'title': None,
         'description': None,
+        'type': None,
+        'url': None, 
+        'image': None,
         'canonical': None,
         'keywords': None,
+        'domain': None,
+        'logo': None
+    }
+    
+    METADATA = {
+                
+        
         'robots': None,
         'og:title': None,
         'og:description': None,
@@ -96,8 +106,9 @@ class MetaDataExtractorNew:
         
         return None
     
-    def medatata_extractor(self): #analizza il contenuto del sito e popola oggetto metadata        
+    def medatata_extractor_old(self): #analizza il contenuto del sito e popola oggetto metadata        
 
+        
         for key in Config.METADATA:
             
             if key.startswith('og:'):
@@ -121,19 +132,31 @@ class MetaDataExtractorNew:
     
     def extract_metadata(self): #prende i metadata e restituisce oggetto solo se valori non sono nulli
 
-        if not self.soup:
-            return {}
+        metadata = Config.METADATA_NEW     
         
-        self.medatata_extractor()
+        metadata['name'] = self.get_meta_tag(property='og:site_name')
+        metadata['title'] =  self.get_meta_tag(property='og:title')
+        metadata['description'] = self.get_meta_tag(property='og:description')
+        metadata['url'] = self.get_meta_tag(property='og:url')
+        metadata['type'] = self.get_meta_tag(property='og:type')
+        metadata['image'] = self.get_meta_tag(property='og:image')        
+        metadata['domain'] = self.get_meta_tag(property='forem:domain')
+        metadata['logo'] = self.get_meta_tag(property='forem:logo')
         
-        metadata = Config.METADATA            
         
-        filtered_metadata = {k: v for k, v in metadata.items() if v is not None}
+        my_filtered_metadata = {
+            k: v for k, v in metadata.items() if v is not None
+        }
         
-        if not filtered_metadata:
-            return None
+        if not my_filtered_metadata:
+            return None 
         
-        return filtered_metadata
+        for key, value in metadata.items():
+            if value is None:
+                print(f"La proprietà '{key}' ha un valore None.")     
+        
+        
+        return my_filtered_metadata
     
     
     
