@@ -111,6 +111,8 @@ class MetaDataExtractorNew:
 
         metadata = Config.METADATA_NEW        
         
+        # @@ get graph metatags @@ 
+        
         metadata['name'] = self.get_meta_tag(property='og:site_name')
         metadata['title'] =  self.get_meta_tag(property='og:title')
         metadata['description'] = self.get_meta_tag(property='og:description')
@@ -118,7 +120,17 @@ class MetaDataExtractorNew:
         metadata['type'] = self.get_meta_tag(property='og:type')
         metadata['image'] = self.get_meta_tag(property='og:image')        
         metadata['domain'] = self.get_meta_tag(property='forem:domain')
-        metadata['logo'] = self.get_meta_tag(property='forem:logo')        
+        metadata['logo'] = self.get_meta_tag(property='forem:logo')
+
+        # @@ get name metatag @@
+        
+        if metadata['title'] is None:
+
+            metadata['title'] = self.get_meta_tag(name='title')
+
+        if metadata['description'] is None:
+
+            metadata['description'] = self.get_meta_tag(name='description')
         
         
         print('metadata: ', metadata)
@@ -126,9 +138,10 @@ class MetaDataExtractorNew:
         # Dizionario per associare le chiavi alle funzioni specifiche
         _functions = {
 
+            "name": self.get_name_by_host,
             "title": self.get_title,
-            "description": lambda: "hello from missing description",
-            "name": lambda: "hello from missing name"
+            "description": self.get_description,
+            "url": lambda: "hello from missing description"           
 
         }
 
@@ -136,7 +149,7 @@ class MetaDataExtractorNew:
 
             if value is None:
 
-                print(f"'{key}': is None")
+                print(f"'{key}': is None")                
 
                 if key in _functions:
 
@@ -164,6 +177,28 @@ class MetaDataExtractorNew:
             print('new metadata: ', Config.METADATA_NEW)
 
             return
+    
+    def get_description(self):        
+        if not self.soup:
+            return None        
+        paragraphs = self.soup.find_all('p')
+        for p in paragraphs:
+            text = p.get_text().strip()
+            if not Config.is_excluded(text):
+                return format_string(text)            
+        return None
+    
+    def get_name_by_host(self):
+        url = self.url
+        parsed_url = urlparse(url)
+        hostname = parsed_url.hostname        
+        common_subdomains = ['www', 'api', 'mail', 'ftp', 'blog', 'shop', 'dev', 'staging', 'test', 'm', 'cdn']        
+        for subdomain in common_subdomains:
+            if hostname.startswith(f"{subdomain}."):
+                hostname = hostname[len(subdomain) + 1:]
+                break        
+        domain_parts = hostname.split('.')        
+        return domain_parts[0].capitalize()
     
     def get_title(self):
         if not self.soup:            
