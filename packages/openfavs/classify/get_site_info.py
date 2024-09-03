@@ -147,6 +147,7 @@ class MetaDataExtractor:
     def get_title(self):
     # Se soup non è definito, restituisce None
         if not self.soup:
+            
             return None
 
         # Cerca il tag <title> o qualsiasi altro elemento con il tag 'title'
@@ -155,25 +156,37 @@ class MetaDataExtractor:
         if title_tag:
             # Verifica se il titolo non è escluso e restituisce il testo formattato
             title_text = title_tag.get_text().strip()
+
             if not Config.is_excluded(title_text):
+
                 return self.format_string(title_text)
 
         # Cerca un tag <h1> e verifica se il testo non è escluso
         h1_tag = self.soup.find('h1')
+
         if h1_tag:
+
             h1_text = h1_tag.get_text().strip()
+
             if not Config.is_excluded(h1_text):
+
                 return h1_text
 
         # Cerca un tag <h2> e verifica se il testo non è escluso
+
         h2_tag = self.soup.find('h2')
+
         if h2_tag:
+
             h2_text = h2_tag.get_text().strip()
+
             if not Config.is_excluded(h2_text):
+
                 return h2_text
         
         # Se c'è un titolo ma non è stato ancora formattato e restituito
         if title_tag and title_tag.string:
+
             return self.format_string(title_tag.string)
         
         # Se non viene trovato nulla di valido, restituisce None

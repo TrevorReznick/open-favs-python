@@ -1,3 +1,146 @@
+  
+  def medatata_extractor_old(self): #analizza il contenuto del sito e popola oggetto metadata        
+
+        
+        for key in Config.METADATA:
+            
+            if key.startswith('og:'):
+                Config.METADATA[key] = self.get_meta_tag(property=key)              
+                                
+            elif key.startswith('twitter:'):
+                Config.METADATA[key] = self.get_meta_tag(property=key)
+                
+            else:
+                # Gestione speciale per 'charset'
+                if key == 'charset':
+                    Config.METADATA[key] = self.get_meta_tag(charset=True)
+                else:
+                    # Cerca per 'name' e non 'property'
+                    Config.METADATA[key] = self.get_meta_tag(name=key)
+
+        return
+    
+    def extract_metadata_old(self): #prende i metadata e restituisce oggetto solo se valori non sono nulli
+
+        metadata = Config.METADATA_NEW     
+        
+        metadata['name'] = self.get_meta_tag(property='og:site_name')
+        metadata['title'] =  self.get_meta_tag(property='og:title')
+        metadata['description'] = self.get_meta_tag(property='og:description')
+        metadata['url'] = self.get_meta_tag(property='og:url')
+        metadata['type'] = self.get_meta_tag(property='og:type')
+        metadata['image'] = self.get_meta_tag(property='og:image')        
+        metadata['domain'] = self.get_meta_tag(property='forem:domain')
+        metadata['logo'] = self.get_meta_tag(property='forem:logo')
+
+        _functions = {
+            "name": lambda: "hello from missing name",
+            "title": self.get_title,
+            "description": lambda: "hello from missing description"            
+        }
+
+        for key, value in metadata.items():
+
+            if value is None:
+
+                print(f"La proprietà '{key}' ha un valore None.")
+
+                if key in _functions:
+
+                    value = _functions[key]()
+        
+        
+        """
+        my_filtered_metadata = {
+            k: v for k, v in metadata.items() if v is not None
+        }
+
+        print('my_filter_metadata', my_filtered_metadata)
+
+        """
+
+        _functions = {
+            "title": self.get_title,
+            "description": lambda: "hello from missing description",
+            "name": lambda: "hello from missing name"
+        }
+        
+        """
+        if not my_filtered_metadata:
+            return None 
+        """        
+        
+        return 
+        
+    
+    
+    def extract_metadata_new(self): #prende i metadata e restituisce oggetto solo se valori non sono nulli
+
+        metadata = Config.METADATA_NEW        
+        
+        metadata['name'] = self.get_meta_tag(property='og:site_name')
+        metadata['title'] =  self.get_meta_tag(property='og:title')
+        metadata['description'] = self.get_meta_tag(property='og:description')
+        metadata['url'] = self.get_meta_tag(property='og:url')
+        metadata['type'] = self.get_meta_tag(property='og:type')
+        metadata['image'] = self.get_meta_tag(property='og:image')        
+        metadata['domain'] = self.get_meta_tag(property='forem:domain')
+        metadata['logo'] = self.get_meta_tag(property='forem:logo')        
+        
+        # Dizionario che conterrà i risultati filtrati e processati
+        """
+        my_filtered_metadata = {}
+
+        my_filtered_metadata = {
+            k: v for k, v in metadata.items() if v is not None
+        }
+
+        print('my_filter_metadata: ', my_filtered_metadata)
+        """
+
+        print('metadata: ', metadata)
+
+        # Dizionario per associare le chiavi alle funzioni specifiche
+        _functions = {
+            "title": self.get_title,
+            "description": lambda: "hello from missing description",
+            "name": lambda: "hello from missing name"
+        }
+
+        # Itera attraverso ogni elemento nel dizionario metadata
+        for key, value in metadata.items():
+
+            # Se il valore è None, esegue una funzione predefinita per quella chiave
+            if value is None:
+                print(f"'{key}': is None")
+                if key in _functions:
+                    value = _functions[key]()
+                    Config.METADATA_NEW[key] = value
+                    continue
+            else:
+                # Se c'è una funzione associata alla chiave, la esegue
+                if key in _functions:
+                    value = _functions[key](value)
+                
+                # Controlla se il valore è escluso dalla configurazione
+                if Config.is_excluded(value):
+                    print(f"Il valore '{value}' per '{key}' è escluso.")
+                    #my_filtered_metadata[key] = None
+                    continue  # Salta l'aggiunta di questo elemento
+
+            # Aggiunge la chiave e il valore processato al dizionario finale
+            #my_filtered_metadata[key] = value
+
+            # Se il dizionario risultante è vuoto, restituisce None
+            #if not my_filtered_metadata:
+                #return None
+
+            #return my_filtered_metadata
+            print('new metadata: ', Config.METADATA_NEW)
+            return
+    
+    
+    
   # @@ testing find similarities and spli sentences @@ #
 
     """matches = find_partial_matches(description, Config.SUGGESTIONS)
