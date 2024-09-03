@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re, json
 from urllib.parse import urlparse
+from utils import format_string
 
 class Config:
 
@@ -29,7 +30,9 @@ class Config:
         'canonical': None,
         'keywords': None,
         'domain': None,
-        'logo': None
+        'logo': None,
+        'icon': None,
+        'author': None
     }
     
     METADATA = {
@@ -132,7 +135,25 @@ class MetaDataExtractorNew:
     
     def extract_metadata(self): #prende i metadata e restituisce oggetto solo se valori non sono nulli
 
-        metadata = Config.METADATA_NEW     
+        metadata = Config.METADATA_NEW
+
+        """
+        METADATA_NEW = {
+            'name': None,
+            'title': None,
+            'description': None,
+            'type': None,
+            'url': None, 
+            'image': None,
+            'canonical': None,
+            'keywords': None,
+            'domain': None,
+            'logo': None,
+            'icon': None,
+            'author': None
+        }
+
+        """     
         
         metadata['name'] = self.get_meta_tag(property='og:site_name')
         metadata['title'] =  self.get_meta_tag(property='og:title')
@@ -151,9 +172,36 @@ class MetaDataExtractorNew:
         if not my_filtered_metadata:
             return None 
         
+        """
+        def case_a():
+            return "Value is 'a'"
+
+        def case_b():
+            return "Value is 'b'"
+
+        def case_c():
+            return "Value is 'c'"
+
+        def default_case():
+            return "Value not recognized"
+
+        switch_dict = {
+            "a": case_a,
+            "b": case_b,
+            "c": case_c
+        }
+
+        def switch_example(value):
+            return switch_dict.get(value, default_case)()
+
+        print(switch_example("b"))  # Stampa "Value is 'b'"
+        print(switch_example("x"))  # Stampa "Value not recognized"
+        """
+        
+        
         for key, value in metadata.items():
             if value is None:
-                print(f"La proprietà '{key}' ha un valore None.")     
+                print(f"'{key}': Null")     
         
         
         return my_filtered_metadata

@@ -1,5 +1,17 @@
 import re, json
-from difflib import SequenceMatcher 
+from difflib import SequenceMatcher
+
+def format_string(input_string):
+        
+        if input_string is None:
+            return None
+        try:
+            # Rimuove eventuali spazi vuoti indesiderati
+            return input_string.strip()
+        
+        except AttributeError as e:
+            print(f"Errore durante la formattazione della stringa: {e}")
+            return input_string.strip()
 
 def extract_json(output, prefix):
     """
