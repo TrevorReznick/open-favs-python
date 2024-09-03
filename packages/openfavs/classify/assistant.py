@@ -1,7 +1,7 @@
 
 #import packages.openfavs.classify.get_site_info_old as get_site_info_old
 from openai import AzureOpenAI, BadRequestError
-import get_site_info, packages.openfavs.classify.url_control as url_control, get_info
+import get_site_info, url_control, get_info
 from load_json import main_cat, sub_cat, area_categories
 from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
 from prompts.prompts import create_summarize_prompt, last_classify_agent
