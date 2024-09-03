@@ -16,8 +16,7 @@ class Config:
         "index": True,
         "Benvenuto": True,
         "sezioni": True,
-        "": True,
-        None: True,
+        "": True
     }
 
     METADATA_NEW = {
@@ -135,25 +134,7 @@ class MetaDataExtractorNew:
     
     def extract_metadata(self): #prende i metadata e restituisce oggetto solo se valori non sono nulli
 
-        metadata = Config.METADATA_NEW
-
-        """
-        METADATA_NEW = {
-            'name': None,
-            'title': None,
-            'description': None,
-            'type': None,
-            'url': None, 
-            'image': None,
-            'canonical': None,
-            'keywords': None,
-            'domain': None,
-            'logo': None,
-            'icon': None,
-            'author': None
-        }
-
-        """     
+        metadata = Config.METADATA_NEW        
         
         metadata['name'] = self.get_meta_tag(property='og:site_name')
         metadata['title'] =  self.get_meta_tag(property='og:title')
@@ -162,49 +143,82 @@ class MetaDataExtractorNew:
         metadata['type'] = self.get_meta_tag(property='og:type')
         metadata['image'] = self.get_meta_tag(property='og:image')        
         metadata['domain'] = self.get_meta_tag(property='forem:domain')
-        metadata['logo'] = self.get_meta_tag(property='forem:logo')
+        metadata['logo'] = self.get_meta_tag(property='forem:logo')        
         
-        
-        my_filtered_metadata = {
+        """my_filtered_metadata = {
             k: v for k, v in metadata.items() if v is not None
-        }
-        
-        if not my_filtered_metadata:
-            return None 
-        
-        """
-        def case_a():
-            return "Value is 'a'"
-
-        def case_b():
-            return "Value is 'b'"
-
-        def case_c():
-            return "Value is 'c'"
-
-        def default_case():
-            return "Value not recognized"
-
-        switch_dict = {
-            "a": case_a,
-            "b": case_b,
-            "c": case_c
-        }
-
-        def switch_example(value):
-            return switch_dict.get(value, default_case)()
-
-        print(switch_example("b"))  # Stampa "Value is 'b'"
-        print(switch_example("x"))  # Stampa "Value not recognized"
-        """
-        
+        }"""
+        my_filtered_metadata = {}
+        """if not my_filtered_metadata:
+            return None """
         
         for key, value in metadata.items():
+
+            _functions = {
+                "title": self.get_title,
+                "description": lambda: "hello from missing description",
+                "name": lambda: "hello from missing name"
+            }
+            
             if value is None:
-                print(f"'{key}': Null")     
+                print(f"'{key}': Null")
+            else:
+                # Verifica se esiste una funzione di processing per la chiave
+                if key in _functions:
+                    # Applica la funzione corrispondente
+                    value = _functions[key]()
+                
+                print(f"Run function -> '{key}': '{value}'")    
+                
+                if Config.is_excluded(value):
+                    print(f"Il valore '{value}' per '{key}' è escluso.")
+                    my_filtered_metadata[key] = None
+                    continue  # Salta l'aggiunta di questo elemento
+
+                my_filtered_metadata[key] = value  # Aggiungi la chiave e il valore processato al nuovo dizionario
+                return my_filtered_metadata
+    
+    def get_title(self):
+    
+        if not self.soup:
+            return None
         
+        title_tag = self.soup.title or self.soup.find('title')
         
-        return my_filtered_metadata
+        if title_tag:
+
+            title_text = title_tag.get_text().strip()
+
+            if not Config.is_excluded(title_text):
+
+                return self.format_string(title_text)
+            
+        else:
+            h1_tag = self.soup.find('h1')
+
+            if h1_tag:
+
+                h1_text = h1_tag.get_text().strip()
+
+                if not Config.is_excluded(h1_text):
+
+                    return h1_text
+                
+        return None
+    
+        """
+        h2_tag = self.soup.find('h2')
+        if h2_tag:
+            h2_text = h2_tag.get_text().strip()
+            if not Config.is_excluded(h2_text):
+                return h2_text
+        
+        # Se c'è un titolo ma non è stato ancora formattato e restituito
+        if title_tag and title_tag.string:
+            return self.format_string(title_tag.string)
+        
+        # Se non viene trovato nulla di valido, restituisce None
+        """
     
     
     

@@ -210,7 +210,8 @@ class Website:
     def get_request_new(self, args):
         self.url = args.get("url") 
         extractor = get_info.MetaDataExtractorNew(args.get("url"))
-        print(extractor.extract_metadata())
+        get_metadata = extractor.extract_metadata()
+        print('metadata: ', get_metadata)
 
 AI = None
 Web = None
