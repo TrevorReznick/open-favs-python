@@ -116,6 +116,7 @@ class MetaDataExtractorNew:
         metadata['name'] = self.get_meta_tag(property='og:site_name')
         metadata['title'] =  self.get_meta_tag(property='og:title')
         metadata['description'] = self.get_meta_tag(property='og:description')
+        metadata['canonical'] = self.get_meta_tag(property='og:canonical')
         metadata['url'] = self.get_meta_tag(property='og:url')
         metadata['type'] = self.get_meta_tag(property='og:type')
         metadata['image'] = self.get_meta_tag(property='og:image')        
@@ -141,6 +142,7 @@ class MetaDataExtractorNew:
             "name": self.get_name_by_host,
             "title": self.get_title,
             "description": self.get_description,
+            "canonical": self.get_canonical_link,
             "url": lambda: "hello from missing description"           
 
         }
@@ -177,6 +179,18 @@ class MetaDataExtractorNew:
             print('new metadata: ', Config.METADATA_NEW)
 
             return
+    
+    def get_canonical_link(self):
+
+        if not self.soup:
+            return None
+        
+        canonical_tag = self.soup.find('link', attrs={'rel': 'canonical'})
+
+        if canonical_tag and 'href' in canonical_tag.attrs:
+            return canonical_tag['href']
+        
+        return None
     
     def get_description(self):        
         if not self.soup:
