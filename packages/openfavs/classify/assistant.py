@@ -223,27 +223,12 @@ def main(args):
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
     
-    url = args.get("url")
-    #print('init MetaDataExtractor class')
-    extractor = get_site_info.MetaDataExtractor(url)    
-    
-    """old prompt to get
-    description = extractor.get_description() 
-    # qui viene seguito controllo se la pagina è accessibile o meno
-    
-    if(description):
-        #print('description exists :', description)
-        a = 1
-    else: 
-        print('description not exists!')   
-    """
-
-   
+    url = args.get("url")    
+    extractor = get_site_info.MetaDataExtractor(url)   
     
     # @@ prod flow @@ #
     
     metadata = Web.get_request(args)    
-    
     
     name = metadata.get('name')
     title = metadata.get('title')
@@ -257,14 +242,7 @@ def main(args):
         url_logs = url_utils.get_url_info()
         print('html content not found; ', url_logs)
         print('debug html content found: ', url_utils.get_html_content())
-        print('debug soup results: ', extractor.get_html_content())
-        
-    #print(html_content)    
-    #title = extractor.get_title() 
-    #json_object = extract_json(classify, 'str_to_obj')
-    #my_string = extract_my_string(classify, 'my_string')
-    #result = {**json_object, **my_string} # Combina i risultati    
-    # reserved_words = ", ".join(Config.RESERVED_WORDS)    
+        print('debug soup results: ', extractor.get_html_content())   
 
     my_prompt = create_summarize_prompt(name, title, description, html_content)
 
@@ -272,11 +250,49 @@ def main(args):
     #print(summarize)
     last_refactored_prompt = last_classify_agent(summarize, name)
     last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
-    print('new_response: ', last_ai_request)
+    #json_object = json.loads(last_ai_request)
+    print('test keys: ', last_ai_request)
+    """
+    if isinstance(last_ai_request, dict):
+        print(last_ai_request.keys())
+    else:
+        print('errore nella lettura json!')
     #print(Web.get_request_new(args))
+    """
+    # 1. Sostituire gli apici singoli con doppi apici
+    corrected_json_string = last_ai_request.replace("'", '"')
+
+    # 2. Rimuovere spazi bianchi extra e nuove linee
+    corrected_json_string = corrected_json_string.strip()
+
+    # 3. Convertire la stringa JSON in un oggetto Python
+    try:
+        json_data = json.loads(corrected_json_string)
+        print("Oggetto JSON convertito con successo:", json_data)
+    except json.JSONDecodeError as e:
+        print(f"Errore nel decodificare la stringa JSON: {e}")
     
 
     return {
         "body": metadata
     }
+    
+    """
+    old prompt to get
+    description = extractor.get_description() 
+    # qui viene seguito controllo se la pagina è accessibile o meno
+    
+    if(description):
+        #print('description exists :', description)
+        a = 1
+    else: 
+        print('description not exists!')   
+    """
+    
+    #print(html_content)    
+    #title = extractor.get_title() 
+    #json_object = extract_json(classify, 'str_to_obj')
+    #my_string = extract_my_string(classify, 'my_string')
+    #result = {**json_object, **my_string} # Combina i risultati    
+    # reserved_words = ", ".join(Config.RESERVED_WORDS)    
      
