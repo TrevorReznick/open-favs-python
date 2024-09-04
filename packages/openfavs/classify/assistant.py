@@ -198,8 +198,15 @@ class Website:
         #self.sanitizer = Sanitizer()  
         #print('init class website')    
     
-
     def get_request(self, args):
+        self.url = args.get("url") 
+        extractor = get_info.MetaDataExtractor(args.get("url"))
+        get_metadata = extractor.extract_metadata()
+        metadata_obj = json.loads(get_metadata)
+        #print('metadata: ', get_metadata)
+        return metadata_obj
+    
+    def get_request_old(self, args):
         
         self.url = args.get("url")        
         extractor = get_site_info.MetaDataExtractor(args.get("url"))
@@ -207,13 +214,7 @@ class Website:
         metadata_obj = json.loads(json_metadata)            
         return metadata_obj
 
-    def get_request_new(self, args):
-        self.url = args.get("url") 
-        extractor = get_info.MetaDataExtractorNew(args.get("url"))
-        get_metadata = extractor.extract_metadata()
-        metadata_obj = json.loads(get_metadata)
-        #print('metadata: ', get_metadata)
-        return metadata_obj
+    
 
 AI = None
 Web = None
@@ -259,28 +260,27 @@ def main(args):
         
     #print(html_content)
 
-    returned_obj = Web.get_request(args)    
+    metadata = Web.get_request(args)    
     
     #json_object = extract_json(classify, 'str_to_obj')
     #my_string = extract_my_string(classify, 'my_string')
     #result = {**json_object, **my_string} # Combina i risultati    
-       
-    reserved_words = ", ".join(Config.RESERVED_WORDS)
-    title = extractor.get_title()
-    name = returned_obj.get('name')   
+    # reserved_words = ", ".join(Config.RESERVED_WORDS)
+    name = metadata.get('name')
+    title = metadata.get('title')
+    #title = extractor.get_title()     
 
     my_prompt = create_summarize_prompt(name, title, description, html_content)
 
     summarize = AI.asks_ai(my_prompt, Config.ROLE)
     #print(summarize)
-
     last_refactored_prompt = last_classify_agent(summarize, name)
     last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
     print('new_response: ', last_ai_request)
-    print(Web.get_request_new(args))
+    #print(Web.get_request_new(args))
     
 
     return {
-        "body": returned_obj
+        "body": metadata
     }
      

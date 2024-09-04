@@ -63,7 +63,7 @@ class Config:
             return True
         return Config.EXCLUDED_WORDS.get(word.lower().strip(), False)
     
-class MetaDataExtractorNew:
+class MetaDataExtractor:
 
     def __init__(self, url):
 
