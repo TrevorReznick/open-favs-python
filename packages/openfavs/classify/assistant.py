@@ -211,7 +211,9 @@ class Website:
         self.url = args.get("url") 
         extractor = get_info.MetaDataExtractorNew(args.get("url"))
         get_metadata = extractor.extract_metadata()
-        print('metadata: ', get_metadata)
+        metadata_obj = json.loads(get_metadata)
+        #print('metadata: ', get_metadata)
+        return metadata_obj
 
 AI = None
 Web = None
@@ -275,7 +277,7 @@ def main(args):
     last_refactored_prompt = last_classify_agent(summarize, name)
     last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
     print('new_response: ', last_ai_request)
-    Web.get_request_new(args)
+    print(Web.get_request_new(args))
     
 
     return {

@@ -176,9 +176,9 @@ class MetaDataExtractorNew:
 
                 continue
 
-            print('new metadata: ', Config.METADATA_NEW)
+            #print('new metadata: ', metadata)
 
-            return
+            return json.dumps(metadata, ensure_ascii=False)
     
     def get_canonical_link(self):
 
