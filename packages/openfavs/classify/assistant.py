@@ -193,10 +193,7 @@ class Website:
 
         self.response = ""
         self.site_info = {}
-        self.url = args.get("url")  
-        #print('debug assistant', args)
-        #self.sanitizer = Sanitizer()  
-        #print('init class website')    
+        self.url = args.get("url")         
     
     def get_request(self, args):
         self.url = args.get("url") 
@@ -221,9 +218,7 @@ Web = None
 
 def main(args):
 
-    global AI, Web
-
-    #print('into main')
+    global AI, Web    
     
     if AI is None: AI = ChatBot(args)    
     if Web is None: Web = Website(args)
@@ -232,25 +227,31 @@ def main(args):
     #print('init MetaDataExtractor class')
     extractor = get_site_info.MetaDataExtractor(url)    
     
-    description = extractor.get_description()
-    html_content = extractor.get_html_content()
-
-    #
+    """old prompt to get
+    description = extractor.get_description() 
+    # qui viene seguito controllo se la pagina è accessibile o meno
+    
     if(description):
         #print('description exists :', description)
         a = 1
     else: 
-        print('description not exists!')
+        print('description not exists!')   
+    """
 
    
     
     # @@ prod flow @@ #
-
-        # qui viene seguito controllo se la pagina è accessibile o meno
+    
+    metadata = Web.get_request(args)    
+    
+    
+    name = metadata.get('name')
+    title = metadata.get('title')
+    description = extractor.get_description() 
+    html_content = extractor.get_html_content()
 
     if(html_content):
         print('html content found!')
-
     else:
         url_utils = url_control.WebControl(url)
         url_logs = url_utils.get_url_info()
@@ -258,17 +259,12 @@ def main(args):
         print('debug html content found: ', url_utils.get_html_content())
         print('debug soup results: ', extractor.get_html_content())
         
-    #print(html_content)
-
-    metadata = Web.get_request(args)    
-    
+    #print(html_content)    
+    #title = extractor.get_title() 
     #json_object = extract_json(classify, 'str_to_obj')
     #my_string = extract_my_string(classify, 'my_string')
     #result = {**json_object, **my_string} # Combina i risultati    
-    # reserved_words = ", ".join(Config.RESERVED_WORDS)
-    name = metadata.get('name')
-    title = metadata.get('title')
-    #title = extractor.get_title()     
+    # reserved_words = ", ".join(Config.RESERVED_WORDS)    
 
     my_prompt = create_summarize_prompt(name, title, description, html_content)
 

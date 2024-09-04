@@ -202,6 +202,30 @@ class MetaDataExtractor:
                 return format_string(text)            
         return None
     
+    def get_html_content(self):
+
+        if not self.soup:
+            print('debug, self soup: ', None)
+            return None
+
+        for element in self.soup(['nav', 'footer', 'header']):
+            element.decompose()
+            
+        paragraphs = self.soup.find_all('p')
+        all_text = []
+        
+        for p in paragraphs:
+            text = p.get_text().strip()
+            all_text.append(text)
+        
+        if not all_text:
+
+            print("Nessun testo trovato nei paragrafi.")
+            return None
+        
+        # Restituisce una singola stringa che unisce tutti i paragrafi con una nuova linea tra di essi
+        return "\n\n".join(all_text)
+    
     def get_name_by_host(self):
         url = self.url
         parsed_url = urlparse(url)
