@@ -43,6 +43,21 @@ def last_classify_agent(summary, name):
     areas = ", ".join([f"{item['area']}" for item in area_categories])
     categories = ", ".join([f"{item['category']}" for item in area_categories])
     
+    # Definizione stringa di esempio
+    tag_1 = "Intelligenza Artificiale, Data Science e Big Data"
+    tag_2 = "Tecnologie e metodologie per l'analisi dei dati"
+    tag_3 = "Big Data Management"
+    tag_4 = "Gestione delle Infrastrutture IT"
+    tag_5 = "Server-Side Rendering (SSR)"
+    my_string = (
+        "The site Corriere della Sera provides a comprehensive collection of headlines, "
+        "snippets, and summaries across a wide array of topics, touching on weather, politics, "
+        "crime, sports, economy, technology, social issues, education, opinions, and human interest stories. "
+        "Given the diverse content..."
+    )    
+    stringa = (
+        f'tag_1="{tag_1}"&tag_2="{tag_2}"&tag_3="{tag_3}"&tag_4="{tag_4}"&tag_5="{tag_5}"&my_string="{my_string}"'
+    )
     
     prompt = f"""
     
@@ -61,29 +76,10 @@ def last_classify_agent(summary, name):
         Start your summary using the name - {name} - capitalized (i.e. the site #name# is... the site #name# belongs to... the site #name# concern.. etc)
         Make the best use of your knowledge.        
         You should structure your answer by splitting the strict answer (Task 1) and the elaborated description (Task 2) using these rules:
-        
-        1. use a JSON object with this shape:
-        
-        {{
-            'tag_1': selected_tag_1, 
-            'tag_2': selected_tag_2, 
-            'tag_3': selected_tag_3, 
-            'tag_4': selected_tag_4,
-            'tag_5': selected_tag_5
-        }}
-
-        2. For Task 2, provide a string, in conversional mode, with the summary of your reasoning prefixed with 'my_string: ' - your notes of logic -.
-        
-        3. so this should have to be the final obj:
-        
-        {{
-            'tag_1': selected_tag_1, 
-            'tag_2': selected_tag_2, 
-            'tag_3': selected_tag_3, 
-            'tag_4': selected_tag_4,
-            'tag_5': selected_tag_5,
-            'my_string': notes of logic
-        }}
+        return a unique string, with key=values separated by &; 
+        Here is an example:
+            
+            {stringa}         
         
         Good luck!       
     """

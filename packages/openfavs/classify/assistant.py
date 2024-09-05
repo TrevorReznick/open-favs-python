@@ -3,7 +3,7 @@
 from openai import AzureOpenAI, BadRequestError
 import get_site_info, url_control, get_info
 from load_json import main_cat, sub_cat, area_categories
-from utils import find_partial_matches, find_partial_matches_new, split_sentence, create_phrases_dict, extract_json, extract_my_string
+from utils import parse_string_to_dict
 from prompts.prompts import create_summarize_prompt, last_classify_agent
 
 class Config:
@@ -250,29 +250,13 @@ def main(args):
     #print(summarize)
     last_refactored_prompt = last_classify_agent(summarize, name)
     last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
-    #json_object = json.loads(last_ai_request)
-    print('test keys: ', last_ai_request)
-    """
-    if isinstance(last_ai_request, dict):
-        print(last_ai_request.keys())
-    else:
-        print('errore nella lettura json!')
-    #print(Web.get_request_new(args))
-    """
-    # 1. Sostituire gli apici singoli con doppi apici
-    corrected_json_string = last_ai_request.replace("'", '"')
-
-    # 2. Rimuovere spazi bianchi extra e nuove linee
-    corrected_json_string = corrected_json_string.strip()
-
-    # 3. Convertire la stringa JSON in un oggetto Python
-    try:
-        json_data = json.loads(corrected_json_string)
-        print("Oggetto JSON convertito con successo:", json_data)
-    except json.JSONDecodeError as e:
-        print(f"Errore nel decodificare la stringa JSON: {e}")
     
-
+    print('AI says: ', last_ai_request)  
+    # Chiamata della funzione e stampa del risultato
+    metadata_dict = parse_string_to_dict(last_ai_request)
+    
+    print(metadata_dict.get('tag_1'))
+    print(metadata_dict.get('my_string'))
     return {
         "body": metadata
     }
