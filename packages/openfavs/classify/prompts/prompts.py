@@ -22,9 +22,9 @@ def create_summarize_prompt(name, title, description, content):
 
 def last_classify_agent(summary, name):
     
-    res_obj = get_complex_obj(area_categories)
-    print('mappa gerarchica ', get_complex_obj(area_categories))
+    res_obj = get_complex_obj(area_categories)    
     areas = ", ".join([f"{item['area']}" for item in area_categories])
+    print('areas', areas)
     categories = ", ".join([f"{item['category']}" for item in area_categories])
     
     # Definizione stringa di esempio
@@ -49,10 +49,13 @@ def last_classify_agent(summary, name):
 
         We provided a text for you; You should examine the text {summary} and give, as if possible, a classification respecting the tree of {res_obj};
                 
-        1. select the most relevant area as first tag;
+        1. Select the most relevant area as the first tag. The service we are working on prioritizes matching the areas from the list - {areas} -. 
+            If the website being analyzed does not align with any of the topics in this list, return 'N/A' as described below.
+            Consider we are working to add other categories, so the 'N/A' will help us to improve our work;
         2. from the main associated areas, choose the most relevant category;
         3. from the areas and associated sub category list, choose the most relevant sub-category as third tag;                
-        4. you may select additional sub-categories the for the 4th and 5th tag, matching exactly the sub tree of already matched categories and sub category from the dictionary - {res_obj}
+        4. you may select additional sub-categories the for the 4th and 5th tag, matching exactly the sub tree of already matched categories 
+            and sub category from the dictionary - {res_obj}
         5. for the 3th, 4th, 5th tag, return the id of the matched sub-category and the name, using the : separator; if you don't find suitable items, return 'null:N/A'
 
         **Task 2**: 
@@ -64,7 +67,7 @@ def last_classify_agent(summary, name):
         return a unique string, with key=values separated by &; 
         Here is an example:
             
-            {stringa}         
+            {stringa}            
         
         Good luck!       
     """
