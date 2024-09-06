@@ -3,7 +3,7 @@
 from openai import AzureOpenAI, BadRequestError
 import get_site_info, url_control, get_info
 from load_json import main_cat, sub_cat, area_categories
-from utils import parse_string_to_dict
+from utils import parse_string_to_dict, process_tags
 from prompts.prompts import create_summarize_prompt, last_classify_agent
 
 class Config:
@@ -248,15 +248,18 @@ def main(args):
 
     summarize = AI.asks_ai(my_prompt, Config.ROLE)
     #print(summarize)
-    last_refactored_prompt = last_classify_agent(summarize, name)
-    last_ai_request = AI.asks_ai(last_refactored_prompt, Config.ROLE)
+    classify_agent = last_classify_agent(summarize, name)
+    ai_request = AI.asks_ai(classify_agent, Config.ROLE)
     
-    print('AI says: ', last_ai_request)  
+    print('AI says: ', ai_request)  
     # Chiamata della funzione e stampa del risultato
-    metadata_dict = parse_string_to_dict(last_ai_request)
+    ai_response_dict = parse_string_to_dict(ai_request)
     
-    print(metadata_dict.get('tag_1'))
-    print(metadata_dict.get('my_string'))
+    final_obj = process_tags(ai_request)
+    print('final obj ', final_obj)
+    
+    print(ai_response_dict.get('tag_5'))
+    print(ai_response_dict.get('my_string'))
     return {
         "body": metadata
     }

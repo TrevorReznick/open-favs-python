@@ -1,30 +1,13 @@
 
 import json
 from load_json import area_categories, main_cat, sub_cat
-#from difflib import SequenceMatcher
+
+from utils import get_complex_obj
 
 # @@ get the cats json object @@ #
 
 main_cat_str = ", ".join([f"{item['cat_name']}" for item in main_cat])
 sub_cat_str = ", ".join([f"{item['cat_name']}" for item in sub_cat])
-
-def crea_mappa_gerarchica(data):
-    mappa_gerarchica = {}
-
-    for item in data:
-        area = item['area']
-        categoria = item['category']
-        sotto_categorie = [sub['sub_category'] for sub in item['sub_categories']]
-
-        if area not in mappa_gerarchica:
-            mappa_gerarchica[area] = {}
-
-        if categoria not in mappa_gerarchica[area]:
-            mappa_gerarchica[area][categoria] = []
-
-        mappa_gerarchica[area][categoria].extend(sotto_categorie)
-
-    return mappa_gerarchica
 
 def create_summarize_prompt(name, title, description, content):
 
@@ -39,7 +22,8 @@ def create_summarize_prompt(name, title, description, content):
 
 def last_classify_agent(summary, name):
     
-    res_obj = crea_mappa_gerarchica(area_categories)    
+    res_obj = get_complex_obj(area_categories)
+    print('mappa gerarchica ', get_complex_obj(area_categories))
     areas = ", ".join([f"{item['area']}" for item in area_categories])
     categories = ", ".join([f"{item['category']}" for item in area_categories])
     
@@ -50,7 +34,7 @@ def last_classify_agent(summary, name):
     tag_4 = "Gestione delle Infrastrutture IT"
     tag_5 = "Server-Side Rendering (SSR)"
     my_string = (
-        "The site Corriere della Sera provides a comprehensive collection of headlines, "
+        "The site Example provides a comprehensive collection of headlines, "
         "snippets, and summaries across a wide array of topics, touching on weather, politics, "
         "crime, sports, economy, technology, social issues, education, opinions, and human interest stories. "
         "Given the diverse content..."
@@ -65,10 +49,11 @@ def last_classify_agent(summary, name):
 
         We provided a text for you; You should examine the text {summary} and give, as if possible, a classification respecting the tree of {res_obj};
                 
-        1. select the most relevant main category as first tag;
-        2. from the main associated categories, choose the most relevant category;
-        3. from the categories and associated sub category list, choose the most relevant sub-category as third tag;                
-        4. you may select additional sub-categories the for the 4th and 5th tag, tring to respect the {res_obj}
+        1. select the most relevant area as first tag;
+        2. from the main associated areas, choose the most relevant category;
+        3. from the areas and associated sub category list, choose the most relevant sub-category as third tag;                
+        4. you may select additional sub-categories the for the 4th and 5th tag, matching exactly the sub tree of already matched categories and sub category from the dictionary - {res_obj}
+        5. for the 3th, 4th, 5th tag, return the id of the matched sub-category and the name, using the : separator; if you don't find suitable items, return 'null:N/A'
 
         **Task 2**: 
         
