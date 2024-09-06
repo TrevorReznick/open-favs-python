@@ -23,7 +23,7 @@ def create_summarize_prompt(name, title, description, content):
 def last_classify_agent(summary, name):
     
     res_obj = get_complex_obj(area_categories)    
-    areas = ", ".join([f"{item['area']}" for item in area_categories])
+    areas = ", ".join(set([f"{item['area']}" for item in area_categories]))
     print('areas', areas)
     categories = ", ".join([f"{item['category']}" for item in area_categories])
     
