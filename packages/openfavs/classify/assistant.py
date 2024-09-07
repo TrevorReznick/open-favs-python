@@ -3,7 +3,7 @@
 from openai import AzureOpenAI, BadRequestError
 import get_site_info, url_control, get_info
 from load_json import main_cat, sub_cat, area_categories
-from utils import parse_string_to_dict
+from utils import parse_string_to_dict, process_tags
 from prompts.prompts import create_summarize_prompt, last_classify_agent
 
 class Config:
@@ -253,7 +253,7 @@ def main(args):
     
     #print('AI says: ', ai_request)  
     # Chiamata della funzione e stampa del risultato
-    response_dict = parse_string_to_dict(ai_request)
+    response_dict = process_tags(ai_request)
     
     response = metadata | response_dict
     
