@@ -56,7 +56,7 @@ def last_classify_agent(summary, name):
         3. from the areas and associated sub category list, choose the most relevant sub-category as third tag;                
         4. you may select additional sub-categories the for the 4th and 5th tag, matching exactly the sub tree of already matched categories 
             and sub category from the dictionary - {res_obj}
-        5. for the 3th, 4th, 5th tag, return the id of the matched sub-category and the name, using the : separator; if you don't find suitable items, return 'null:N/A'
+        5. for the 3th, 4th, 5th tag, return the id of the matched sub-category and the name, using the : separator; if you don't find suitable items, return null:N/A'
 
         **Task 2**: 
         
