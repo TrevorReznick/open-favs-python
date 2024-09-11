@@ -24,8 +24,8 @@ def main(args):
         
         #print(control_url.get_url_info())
         if(control_url.validate_url()):
-            print('url corretto!')
-            print('debug main url', url)
+            #print('url corretto!')
+            #print('debug main url', url)
             return assistant.main(args)
     else:
         print('errore url')

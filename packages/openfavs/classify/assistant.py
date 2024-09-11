@@ -226,10 +226,9 @@ def main(args):
     url = args.get("url")    
     extractor = get_site_info.MetaDataExtractor(url)   
     
-    # @@ prod flow @@ #
-    
     metadata = Web.get_request(args)    
     
+    # @@@ use extractor to give arguments for the summary prompt function @@@
     name = metadata.get('name')
     title = metadata.get('title')
     description = extractor.get_description() 
