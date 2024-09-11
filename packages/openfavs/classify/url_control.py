@@ -3,12 +3,63 @@ from urllib.parse import urlparse
 import re
 import socket
 
+class MetadataProcessingError(Exception):
+    
+    """Eccezione personalizzata per la gestione degli errori di elaborazione dei metadati."""
+    
+    pass
+
 class WebControl:
 
     def __init__(self, url):
+        
         self.url = url
         self.parsed_url = urlparse(url)
+        
+    def validate_site(self):
+        
+        error_log = {}
+        
+        processed_data = {}
+        
+        _functions = {
+            
+            "valid_url": self.is_valid_url,
+            "accessible" : self.is_accessible,
+            "secure" : self.is_secure,
+            "domain_exists": self.domain_exists,
+            "redirect_exists": self.get_redirects,
+            "html_content_exists": self.get_html_content
+        
+        }
+        
+        for key, func in _functions.items():
+            
+            try:
+                # Applica la funzione di processing alla chiave
+                processed_data[key] = func()
+                
+            except MetadataProcessingError as e:
+                # Registra l'errore per la chiave specifica
+                error_log[key] = str(e)
+                
+            except Exception as e:
+                # Registra errori generici non previsti
+                error_log[key] = f"Errore sconosciuto: {str(e)}"
 
+        # Se ci sono errori, ritorna un dizionario di errori e una risposta 5XX
+        
+        if error_log:
+            return {
+                "status": "500 Failed to analyze site",
+                "errors": error_log
+            }
+        else:
+            return {
+                "status": "Active",
+                "logs": processed_data
+            }
+            
     def is_valid_url(self):
 
         # Verifica la validità dell'URL
@@ -20,6 +71,10 @@ class WebControl:
             r'\[?[A-F0-9]*:[A-F0-9:]+\]?)'  # ...o un indirizzo IPv6
             r'(?::\d+)?'  # porta opzionale
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        
+        if re.match(regex, self.url) is None:
+            raise MetadataProcessingError(f"Errore: URL non valido - '{self.url}'")
+        
         return re.match(regex, self.url) is not None
 
     def is_accessible(self):
@@ -28,8 +83,11 @@ class WebControl:
         try:
             response = requests.head(self.url, allow_redirects=True, timeout=5)
             return response.status_code == 200
+        
         except requests.exceptions.RequestException:
-            return False
+            
+            raise MetadataProcessingError(f"Errore: URL non valido - '{self.url}'")
+            
 
     def is_secure(self):
 
@@ -43,8 +101,9 @@ class WebControl:
             domain = self.parsed_url.netloc
             socket.gethostbyname(domain)
             return True
+        
         except socket.error:
-            return False
+            raise MetadataProcessingError(f"Errore: dominio non esistente - '{domain}'")
 
     def get_redirects(self):
 
@@ -60,11 +119,15 @@ class WebControl:
         # Estrae il contenuto HTML della pagina
         try:
             response = requests.get(self.url, timeout=5)
+            
             if response.status_code == 200:
                 return response.text
             return None
+        
         except requests.exceptions.RequestException:
-            return None
+            
+            raise MetadataProcessingError(f"Errore: contenuto html non trovato")
+            
 
     def get_url_info(self):
 

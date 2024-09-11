@@ -15,7 +15,13 @@ def main(args):
     url = args.get('url')
     
     if(url):
+        
         control_url = url_control.WebControl(url)
+        
+        test_site = control_url.validate_site()
+        
+        print('hello', test_site)
+        
         #print(control_url.get_url_info())
         if(control_url.validate_url()):
             print('url corretto!')
