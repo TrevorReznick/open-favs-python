@@ -255,8 +255,19 @@ def main(args):
     response_dict = process_tags(ai_request)
     if response_dict:
         response_dict['AI'] = True
+        
     
-    response = metadata | response_dict
+    # @@ get logs from site analys @@
+    
+    control_url = url_control.WebControl(url)
+        
+    access_site = control_url.validate_site()
+    
+    access_logs = access_site.get('body')
+        
+    print('grab logs', access_site.get('body'))
+    
+    response = metadata | response_dict | access_logs
     
     return {
         "body": response

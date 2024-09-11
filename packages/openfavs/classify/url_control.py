@@ -20,7 +20,7 @@ class WebControl:
         
         error_log = {}
         
-        processed_data = {}
+        access_logs = {}
         
         _functions = {
             
@@ -29,7 +29,8 @@ class WebControl:
             "secure" : self.is_secure,
             "domain_exists": self.domain_exists,
             "redirect_exists": self.get_redirects,
-            "html_content_exists": self.get_html_content
+            "html_content_exists": self.get_html_content,
+            "status_code": self.status_code
         
         }
         
@@ -37,7 +38,7 @@ class WebControl:
             
             try:
                 # Applica la funzione di processing alla chiave
-                processed_data[key] = func()
+                access_logs[key] = func()
                 
             except MetadataProcessingError as e:
                 # Registra l'errore per la chiave specifica
@@ -51,13 +52,11 @@ class WebControl:
         
         if error_log:
             return {
-                "status": "500 Failed to analyze site",
-                "errors": error_log
+                "body": error_log
             }
         else:
             return {
-                "status": "Active",
-                "logs": processed_data
+                "body": access_logs
             }
             
     def is_valid_url(self):
@@ -73,16 +72,32 @@ class WebControl:
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
         
         if re.match(regex, self.url) is None:
-            raise MetadataProcessingError(f"Errore: URL non valido - '{self.url}'")
+            #raise MetadataProcessingError(f"Errore: URL non valido - '{self.url}'")
+            return None
         
         return re.match(regex, self.url) is not None
 
+    def status_code(self):
+        
+        # Verifica se l'URL è accessibile e restituisce un codice di stato 200
+        try:
+            response = requests.head(self.url, allow_redirects=True, timeout=5)
+            
+            return response.status_code
+        
+        except requests.exceptions.RequestException:
+            
+            raise MetadataProcessingError("Errore generico!")
+    
     def is_accessible(self):
 
         # Verifica se l'URL è accessibile e restituisce un codice di stato 200
         try:
             response = requests.head(self.url, allow_redirects=True, timeout=5)
-            return response.status_code == 200
+            
+            if response.status_code == 200:
+                
+                return True
         
         except requests.exceptions.RequestException:
             
@@ -110,7 +125,9 @@ class WebControl:
         # Verifica se l'URL reindirizza e restituisce l'URL finale
         try:
             response = requests.head(self.url, allow_redirects=True, timeout=5)
-            return response.url if response.url != self.url else None
+            
+            return True if response.url != self.url else None
+        
         except requests.exceptions.RequestException:
             return None
 
@@ -121,12 +138,13 @@ class WebControl:
             response = requests.get(self.url, timeout=5)
             
             if response.status_code == 200:
-                return response.text
-            return None
+                return True
+            else:
+                return None
         
         except requests.exceptions.RequestException:
             
-            raise MetadataProcessingError(f"Errore: contenuto html non trovato")
+            raise MetadataProcessingError(f"Html status code: {response.status_code}")
             
 
     def get_url_info(self):

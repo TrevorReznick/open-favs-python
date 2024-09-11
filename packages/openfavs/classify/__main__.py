@@ -16,11 +16,7 @@ def main(args):
     
     if(url):
         
-        control_url = url_control.WebControl(url)
-        
-        test_site = control_url.validate_site()
-        
-        print('hello', test_site)
+        control_url = url_control.WebControl(url)        
         
         #print(control_url.get_url_info())
         if(control_url.validate_url()):
@@ -28,8 +24,11 @@ def main(args):
             #print('debug main url', url)
             return assistant.main(args)
     else:
-        print('errore url')
-        return None
+        
+        #print('errore url')
+        return {
+            "body": None
+        }
         
     """
     return { 
