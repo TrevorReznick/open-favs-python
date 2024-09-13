@@ -641,5 +641,41 @@
         "area": "IoT, Edge Computing e Cloud Computing",
         "category": "Virtualizzazione per la scalabilità e l'efficienza delle risorse IT",
         "sub_categories": []
+    },
+    {
+        "id": 25,
+        "area": "eLearning e Formazione Digitale",
+        "category": "Piattaforme di Apprendimento Online",
+        "sub_categories": []
+    },
+    {
+        "id": 26,
+        "area": "eLearning e Formazione Digitale",
+        "category": "Metodologie e Pedagogia per l'eLearning",
+        "sub_categories": []
+    },
+    {
+        "id": 27,
+        "area": "eLearning e Formazione Digitale",
+        "category": "Strumenti per la Creazione e la Distribuzione di Contenuti Didattici",
+        "sub_categories": []
+    },
+    {
+        "id": 28,
+        "area": "eLearning e Formazione Digitale",
+        "category": "Tecnologie e Innovazioni in eLearning",
+        "sub_categories": []
+    },
+    {
+        "id": 29,
+        "area": "eLearning e Formazione Digitale",
+        "category": "Valutazione e Monitoraggio dell'Apprendimento",
+        "sub_categories": []
+    },
+    {
+        "id": 30,
+        "area": "eLearning e Formazione Digitale",
+        "category": "Sfide e Opportunità nell'eLearning",
+        "sub_categories": []
     }
 ]
