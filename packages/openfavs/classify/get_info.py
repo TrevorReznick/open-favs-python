@@ -143,7 +143,8 @@ class MetaDataExtractor:
             "title": self.get_title,
             "description": self.get_description,
             "canonical": self.get_canonical_link,
-            "url": lambda: "hello from missing description"           
+            "type": metadata['type'],
+            "url": lambda: "hello from missing description"
 
         }
 
@@ -237,7 +238,7 @@ class MetaDataExtractor:
                 break        
         domain_parts = hostname.split('.')        
         return domain_parts[0].capitalize()
-    
+        
     def get_title(self):
         if not self.soup:            
             return None
