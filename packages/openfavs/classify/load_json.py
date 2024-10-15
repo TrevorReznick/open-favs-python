@@ -1,5 +1,7 @@
 
 import json
+import os
+print("Current working directory:", os.getcwd())
 
 def load_json(file_path):
     with open(file_path, 'r') as file:

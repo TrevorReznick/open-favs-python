@@ -2,680 +2,293 @@
     {
         "id": 1,
         "area": "Sviluppo Software e DevOps",
-        "category": "Linguaggi di Programmazione e Paradigmi",
-        "sub_categories": [
+        "categories": [
             {
                 "id": 1,
-                "sub_category": "JavaScript"
+                "category": "Linguaggi di Programmazione e Paradigmi",
+                "sub_categories": [
+                    {
+                        "id": 1,
+                        "sub_category": "JavaScript"
+                    },
+                    {
+                        "id": 2,
+                        "sub_category": "Typescript"
+                    },
+                    {
+                        "id": 3,
+                        "sub_category": "Python"
+                    },
+                    {
+                        "id": 4,
+                        "sub_category": "Php"
+                    },
+                    {
+                        "id": 5,
+                        "sub_category": "Go"
+                    },
+                    {
+                        "id": 6,
+                        "sub_category": "Rust"
+                    },
+                    {
+                        "id": 7,
+                        "sub_category": "Functional Programming"
+                    },
+                    {
+                        "id": 8,
+                        "sub_category": "Object-Oriented Programming (OOP)"
+                    }
+                ]
             },
             {
                 "id": 2,
-                "sub_category": "Typescript"
+                "category": "Frameworks e Librerie",
+                "sub_categories": [
+                    {
+                        "id": 9,
+                        "sub_category": "React"
+                    },
+                    {
+                        "id": 10,
+                        "sub_category": "Angular"
+                    },
+                    {
+                        "id": 11,
+                        "sub_category": "Vue.js"
+                    },
+                    {
+                        "id": 12,
+                        "sub_category": "Svelte"
+                    },
+                    {
+                        "id": 13,
+                        "sub_category": "SvelteKit"
+                    },
+                    {
+                        "id": 14,
+                        "sub_category": "Next.js"
+                    },
+                    {
+                        "id": 15,
+                        "sub_category": "Nuxt.js"
+                    },
+                    {
+                        "id": 16,
+                        "sub_category": "Astro"
+                    },
+                    {
+                        "id": 17,
+                        "sub_category": "SolidJS"
+                    },
+                    {
+                        "id": 18,
+                        "sub_category": "Alpine.js"
+                    },
+                    {
+                        "id": 19,
+                        "sub_category": "Ember.js"
+                    },
+                    {
+                        "id": 20,
+                        "sub_category": "Tailwind CSS"
+                    },
+                    {
+                        "id": 21,
+                        "sub_category": "Styled Components"
+                    },
+                    {
+                        "id": 22,
+                        "sub_category": "Emotion"
+                    },
+                    {
+                        "id": 23,
+                        "sub_category": "Chakra UI"
+                    }
+                ]
             },
             {
                 "id": 3,
-                "sub_category": "Python"
-            },
-            {
-                "id": 4,
-                "sub_category": "Php"
-            },
-            {
-                "id": 5,
-                "sub_category": "Go"
-            },
-            {
-                "id": 6,
-                "sub_category": "Rust"
-            },
-            {
-                "id": 7,
-                "sub_category": "Functional Programming"
-            },
-            {
-                "id": 8,
-                "sub_category": "Object-Oriented Programming (OOP)"
+                "category": "DevOps e CI/CD",
+                "sub_categories": [
+                    {
+                        "id": 24,
+                        "sub_category": "Jenkins"
+                    },
+                    {
+                        "id": 25,
+                        "sub_category": "CircleCI"
+                    },
+                    {
+                        "id": 26,
+                        "sub_category": "GitHub Actions"
+                    },
+                    {
+                        "id": 27,
+                        "sub_category": "GitLab CI/CD"
+                    },
+                    {
+                        "id": 28,
+                        "sub_category": "Travis CI"
+                    },
+                    {
+                        "id": 29,
+                        "sub_category": "Continuous Integration (CI)"
+                    },
+                    {
+                        "id": 30,
+                        "sub_category": "Continuous Deployment (CD)"
+                    },
+                    {
+                        "id": 31,
+                        "sub_category": "Infrastructure as Code (IaC)"
+                    },
+                    {
+                        "id": 32,
+                        "sub_category": "Ansible"
+                    },
+                    {
+                        "id": 33,
+                        "sub_category": "Terraform"
+                    },
+                    {
+                        "id": 34,
+                        "sub_category": "CloudFormation"
+                    },
+                    {
+                        "id": 35,
+                        "sub_category": "Kubernetes"
+                    },
+                    {
+                        "id": 36,
+                        "sub_category": "Docker"
+                    },
+                    {
+                        "id": 37,
+                        "sub_category": "Helm"
+                    },
+                    {
+                        "id": 38,
+                        "sub_category": "ArgoCD"
+                    }
+                ]
             }
         ]
     },
     {
         "id": 2,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Frameworks e Librerie",
-        "sub_categories": [
-            {
-                "id": 9,
-                "sub_category": "React"
-            },
-            {
-                "id": 10,
-                "sub_category": "Angular"
-            },
-            {
-                "id": 11,
-                "sub_category": "Vue.js"
-            },
-            {
-                "id": 12,
-                "sub_category": "Svelte"
-            },
+        "area": "Gestione IT e Sicurezza Informatica",
+        "categories": [
             {
                 "id": 13,
-                "sub_category": "SvelteKit"
-            },
-            {
-                "id": 14,
-                "sub_category": "Next.js"
-            },
-            {
-                "id": 15,
-                "sub_category": "Nuxt.js"
-            },
-            {
-                "id": 16,
-                "sub_category": "Astro"
-            },
-            {
-                "id": 17,
-                "sub_category": "SolidJS"
-            },
-            {
-                "id": 18,
-                "sub_category": "Alpine.js"
-            },
-            {
-                "id": 19,
-                "sub_category": "Ember.js"
-            },
-            {
-                "id": 20,
-                "sub_category": "Tailwind CSS"
-            },
-            {
-                "id": 21,
-                "sub_category": "Styled Components"
-            },
-            {
-                "id": 22,
-                "sub_category": "Emotion"
-            },
-            {
-                "id": 23,
-                "sub_category": "Chakra UI"
+                "category": "Gestione delle Infrastrutture IT",
+                "sub_categories": []
             }
         ]
     },
     {
         "id": 3,
-        "area": "Sviluppo Software e DevOps",
-        "category": "DevOps e CI/CD",
-        "sub_categories": [
+        "area": "Intelligenza Artificiale, Data Science e Big Data",
+        "categories": [
             {
-                "id": 24,
-                "sub_category": "Jenkins"
+                "id": 14,
+                "category": "Tecnologie e metodologie per l'analisi dei dati",
+                "sub_categories": []
             },
             {
-                "id": 25,
-                "sub_category": "CircleCI"
+                "id": 15,
+                "category": "Apprendimento automatico",
+                "sub_categories": []
             },
             {
-                "id": 26,
-                "sub_category": "GitHub Actions"
-            },
-            {
-                "id": 27,
-                "sub_category": "GitLab CI/CD"
-            },
-            {
-                "id": 28,
-                "sub_category": "Travis CI"
-            },
-            {
-                "id": 29,
-                "sub_category": "Continuous Integration (CI)"
-            },
-            {
-                "id": 30,
-                "sub_category": "Continuous Deployment (CD)"
-            },
-            {
-                "id": 31,
-                "sub_category": "Infrastructure as Code (IaC)"
-            },
-            {
-                "id": 32,
-                "sub_category": "Ansible"
-            },
-            {
-                "id": 33,
-                "sub_category": "Terraform"
-            },
-            {
-                "id": 34,
-                "sub_category": "CloudFormation"
-            },
-            {
-                "id": 35,
-                "sub_category": "Kubernetes"
-            },
-            {
-                "id": 36,
-                "sub_category": "Docker"
-            },
-            {
-                "id": 37,
-                "sub_category": "Helm"
-            },
-            {
-                "id": 38,
-                "sub_category": "ArgoCD"
+                "id": 16,
+                "category": "Gestione ed elaborazione di grandi volumi di dati",
+                "sub_categories": []
             }
         ]
     },
     {
         "id": 4,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Frontend e Backend Development",
-        "sub_categories": [
+        "area": "Blockchain e Tecnologie Distribuite",
+        "categories": [
             {
-                "id": 39,
-                "sub_category": "JAMstack"
+                "id": 17,
+                "category": "Sistemi decentralizzati e blockchain",
+                "sub_categories": []
             },
             {
-                "id": 40,
-                "sub_category": "SSR (Server-Side Rendering)"
+                "id": 18,
+                "category": "Smart contracts",
+                "sub_categories": []
             },
             {
-                "id": 41,
-                "sub_category": "SSG (Static Site Generation)"
-            },
-            {
-                "id": 42,
-                "sub_category": "RESTful API"
-            },
-            {
-                "id": 43,
-                "sub_category": "GraphQL"
-            },
-            {
-                "id": 44,
-                "sub_category": "WebSockets"
-            },
-            {
-                "id": 45,
-                "sub_category": "Microservices"
-            },
-            {
-                "id": 46,
-                "sub_category": "Serverless"
-            },
-            {
-                "id": 47,
-                "sub_category": "API Gateway"
-            },
-            {
-                "id": 48,
-                "sub_category": "Service Mesh"
-            },
-            {
-                "id": 49,
-                "sub_category": "BFF (Backend for Frontend)"
-            },
-            {
-                "id": 50,
-                "sub_category": "WebAssembly (Wasm)"
+                "id": 19,
+                "category": "Criptovalute e tecnologie distribuite per la sicurezza e la trasparenza delle transazioni",
+                "sub_categories": []
             }
         ]
     },
     {
         "id": 5,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Gestione Dati e Database",
-        "sub_categories": [
+        "area": "IoT, Edge Computing e Cloud Computing",
+        "categories": [
             {
-                "id": 51,
-                "sub_category": "SQL/NoSQL Databases"
+                "id": 20,
+                "category": "Sistemi e architetture per l'Internet delle Cose",
+                "sub_categories": []
             },
             {
-                "id": 52,
-                "sub_category": "PostgreSQL"
+                "id": 21,
+                "category": "Calcolo distribuito",
+                "sub_categories": []
             },
             {
-                "id": 53,
-                "sub_category": "MySQL/MariaDB"
+                "id": 22,
+                "category": "Cloud computing",
+                "sub_categories": []
             },
             {
-                "id": 54,
-                "sub_category": "MongoDB"
-            },
-            {
-                "id": 55,
-                "sub_category": "Redis"
-            },
-            {
-                "id": 56,
-                "sub_category": "Cassandra"
-            },
-            {
-                "id": 57,
-                "sub_category": "DynamoDB"
-            },
-            {
-                "id": 58,
-                "sub_category": "Prisma"
-            },
-            {
-                "id": 59,
-                "sub_category": "Hasura"
-            },
-            {
-                "id": 60,
-                "sub_category": "Supabase"
-            },
-            {
-                "id": 61,
-                "sub_category": "PlanetScale"
-            },
-            {
-                "id": 62,
-                "sub_category": "FaunaDB"
-            },
-            {
-                "id": 63,
-                "sub_category": "GraphQL Databases"
-            },
-            {
-                "id": 64,
-                "sub_category": "Data Warehousing"
-            },
-            {
-                "id": 65,
-                "sub_category": "Big Data ManagemenT"
+                "id": 23,
+                "category": "Virtualizzazione per la scalabilità e l'efficienza delle risorse IT",
+                "sub_categories": []
             }
         ]
     },
     {
         "id": 6,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Testing e Quality Assurance (QA)",
-        "sub_categories": [
+        "area": "eLearning e Formazione Digitale",
+        "categories": [
             {
-                "id": 66,
-                "sub_category": "Unit Testing"
+                "id": 25,
+                "category": "Piattaforme di Apprendimento Online",
+                "sub_categories": []
             },
             {
-                "id": 67,
-                "sub_category": "Integration Testing"
+                "id": 26,
+                "category": "Metodologie e Pedagogia per l'eLearning",
+                "sub_categories": []
             },
             {
-                "id": 68,
-                "sub_category": "End-to-End Testing"
+                "id": 27,
+                "category": "Strumenti per la Creazione e la Distribuzione di Contenuti Didattici",
+                "sub_categories": []
             },
             {
-                "id": 69,
-                "sub_category": "Cypress"
+                "id": 28,
+                "category": "Tecnologie e Innovazioni in eLearning",
+                "sub_categories": []
             },
             {
-                "id": 70,
-                "sub_category": "Playwright"
+                "id": 29,
+                "category": "Valutazione e Monitoraggio dell'Apprendimento",
+                "sub_categories": []
             },
             {
-                "id": 71,
-                "sub_category": "Jest"
-            },
-            {
-                "id": 72,
-                "sub_category": "Mocha/Chai"
-            },
-            {
-                "id": 73,
-                "sub_category": "Storybook"
-            },
-            {
-                "id": 74,
-                "sub_category": "Static Code Analysis"
-            },
-            {
-                "id": 75,
-                "sub_category": "Dynamic Code Analysis"
-            },
-            {
-                "id": 76,
-                "sub_category": "Security Testing"
-            },
-            {
-                "id": 77,
-                "sub_category": "Performance Testing"
-            },
-            {
-                "id": 78,
-                "sub_category": "Load Testing"
+                "id": 30,
+                "category": "Sfide e Opportunità nell'eLearning",
+                "sub_categories": []
             }
         ]
-    },
-    {
-        "id": 7,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Performance e Ottimizzazione",
-        "sub_categories": [
-            {
-                "id": 79,
-                "sub_category": "Web Performance Optimization (WPO)"
-            },
-            {
-                "id": 80,
-                "sub_category": "Lighthouse"
-            },
-            {
-                "id": 81,
-                "sub_category": "Webpack"
-            },
-            {
-                "id": 82,
-                "sub_category": "ESBuild"
-            },
-            {
-                "id": 83,
-                "sub_category": "Rollup"
-            },
-            {
-                "id": 84,
-                "sub_category": "Parcel"
-            },
-            {
-                "id": 85,
-                "sub_category": "Code Splitting"
-            },
-            {
-                "id": 86,
-                "sub_category": "Lazy Loading"
-            },
-            {
-                "id": 87,
-                "sub_category": "Server-Side Rendering (SSR)"
-            },
-            {
-                "id": 88,
-                "sub_category": "Static Site Generation (SSG)"
-            },
-            {
-                "id": 89,
-                "sub_category": "CDN Optimization"
-            }
-        ]
-    },
-    {
-        "id": 9,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Sviluppo Mobile",
-        "sub_categories": [
-            {
-                "id": 98,
-                "sub_category": "Native Mobile Development (Swift, Kotlin)"
-            },
-            {
-                "id": 99,
-                "sub_category": "React Native"
-            },
-            {
-                "id": 100,
-                "sub_category": "Flutter"
-            },
-            {
-                "id": 101,
-                "sub_category": "PWA (Progressive Web Apps)"
-            },
-            {
-                "id": 102,
-                "sub_category": "Mobile Backend as a Service (MBaaS)"
-            },
-            {
-                "id": 103,
-                "sub_category": "Cross-Platform Development"
-            },
-            {
-                "id": 104,
-                "sub_category": "Mobile Security"
-            },
-            {
-                "id": 105,
-                "sub_category": "Mobile Performance Optimization"
-            }
-        ]
-    },
-    {
-        "id": 10,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Metodologie di Sviluppo Avanzate",
-        "sub_categories": [
-            {
-                "id": 106,
-                "sub_category": "Agile Development"
-            },
-            {
-                "id": 107,
-                "sub_category": "Scrum"
-            },
-            {
-                "id": 108,
-                "sub_category": "Kanban"
-            },
-            {
-                "id": 109,
-                "sub_category": "Lean Development"
-            },
-            {
-                "id": 110,
-                "sub_category": "Continuous Delivery"
-            },
-            {
-                "id": 111,
-                "sub_category": "Microservices Architecture"
-            },
-            {
-                "id": 112,
-                "sub_category": "Event-Driven Architecture"
-            },
-            {
-                "id": 113,
-                "sub_category": "CQRS (Command Query Responsibility Segregation)"
-            },
-            {
-                "id": 114,
-                "sub_category": "Server-Driven UI"
-            },
-            {
-                "id": 115,
-                "sub_category": "Micro Frontends"
-            }
-        ]
-    },
-    {
-        "id": 11,
-        "area": "Sviluppo Software e DevOps",
-        "category": "UX/UI Design",
-        "sub_categories": [
-            {
-                "id": 116,
-                "sub_category": "User-Centered Design"
-            },
-            {
-                "id": 117,
-                "sub_category": "Responsive Design"
-            },
-            {
-                "id": 118,
-                "sub_category": "Accessibility (WCAG)"
-            },
-            {
-                "id": 119,
-                "sub_category": "Design Systems"
-            },
-            {
-                "id": 120,
-                "sub_category": "Prototyping Tools (Figma, Sketch)"
-            },
-            {
-                "id": 121,
-                "sub_category": "User Testing"
-            },
-            {
-                "id": 122,
-                "sub_category": "Interaction Design"
-            },
-            {
-                "id": 123,
-                "sub_category": "Motion Design"
-            },
-            {
-                "id": 124,
-                "sub_category": "Information Architecture"
-            },
-            {
-                "id": 125,
-                "sub_category": "Visual Design"
-            }
-        ]
-    },
-    {
-        "id": 12,
-        "area": "Sviluppo Software e DevOps",
-        "category": "Collaboration and Project Management\n\n",
-        "sub_categories": [
-            {
-                "id": 126,
-                "sub_category": "Version Control Systems (Git, GitHub, GitLab)"
-            },
-            {
-                "id": 127,
-                "sub_category": "Continuous Integration/Continuous Deployment (CI/CD)"
-            },
-            {
-                "id": 128,
-                "sub_category": "Project Management Tools (Jira, Trello)"
-            },
-            {
-                "id": 129,
-                "sub_category": "Collaboration Tools (Slack, Microsoft Teams)"
-            },
-            {
-                "id": 130,
-                "sub_category": "Documentation (Confluence, Notion)"
-            },
-            {
-                "id": 131,
-                "sub_category": "Agile Project Management"
-            },
-            {
-                "id": 132,
-                "sub_category": "DevOps Practices"
-            },
-            {
-                "id": 133,
-                "sub_category": "Remote Work Best Practices"
-            }
-        ]
-    },
-    {
-        "id": 13,
-        "area": "Gestione IT e Sicurezza Informatica",
-        "category": "Gestione delle Infrastrutture IT",
-        "sub_categories": []
-    },
-    {
-        "id": 14,
-        "area": "Intelligenza Artificiale, Data Science e Big Data",
-        "category": "Tecnologie e metodologie per l'analisi dei dati",
-        "sub_categories": []
-    },
-    {
-        "id": 15,
-        "area": "Intelligenza Artificiale, Data Science e Big Data",
-        "category": "Apprendimento automatico",
-        "sub_categories": []
-    },
-    {
-        "id": 16,
-        "area": "Intelligenza Artificiale, Data Science e Big Data",
-        "category": "Gestione ed elaborazione di grandi volumi di dati",
-        "sub_categories": []
-    },
-    {
-        "id": 17,
-        "area": "Blockchain e Tecnologie Distribuite",
-        "category": "Sistemi decentralizzati e blockchain  ",
-        "sub_categories": []
-    },
-    {
-        "id": 18,
-        "area": "Blockchain e Tecnologie Distribuite",
-        "category": "Smart contracts",
-        "sub_categories": []
-    },
-    {
-        "id": 19,
-        "area": "Blockchain e Tecnologie Distribuite",
-        "category": "Criptovalute e tecnologie distribuite per la sicurezza e la trasparenza delle transazioni",
-        "sub_categories": []
-    },
-    {
-        "id": 20,
-        "area": "IoT, Edge Computing e Cloud Computing",
-        "category": "Sistemi e architetture per l'Internet delle Cose",
-        "sub_categories": []
-    },
-    {
-        "id": 21,
-        "area": "IoT, Edge Computing e Cloud Computing",
-        "category": "Calcolo distribuito",
-        "sub_categories": []
-    },
-    {
-        "id": 22,
-        "area": "IoT, Edge Computing e Cloud Computing",
-        "category": "Cloud computing ",
-        "sub_categories": []
-    },
-    {
-        "id": 23,
-        "area": "IoT, Edge Computing e Cloud Computing",
-        "category": "Virtualizzazione per la scalabilità e l'efficienza delle risorse IT",
-        "sub_categories": []
-    },
-    {
-        "id": 25,
-        "area": "eLearning e Formazione Digitale",
-        "category": "Piattaforme di Apprendimento Online",
-        "sub_categories": []
-    },
-    {
-        "id": 26,
-        "area": "eLearning e Formazione Digitale",
-        "category": "Metodologie e Pedagogia per l'eLearning",
-        "sub_categories": []
-    },
-    {
-        "id": 27,
-        "area": "eLearning e Formazione Digitale",
-        "category": "Strumenti per la Creazione e la Distribuzione di Contenuti Didattici",
-        "sub_categories": []
-    },
-    {
-        "id": 28,
-        "area": "eLearning e Formazione Digitale",
-        "category": "Tecnologie e Innovazioni in eLearning",
-        "sub_categories": []
-    },
-    {
-        "id": 29,
-        "area": "eLearning e Formazione Digitale",
-        "category": "Valutazione e Monitoraggio dell'Apprendimento",
-        "sub_categories": []
-    },
-    {
-        "id": 30,
-        "area": "eLearning e Formazione Digitale",
-        "category": "Sfide e Opportunità nell'eLearning",
-        "sub_categories": []
+
     }
 ]

@@ -18,6 +18,44 @@ def process_tags(stringa):
     # Dividi la stringa per '&' per ottenere le coppie chiave=valore
     pairs = stringa.split('&')
     obj = {}
+    for pair in pairs:
+        key, value = pair.split('=')
+        key = key.strip()
+        value = value.strip().strip('"')  # Rimuovi eventuali spazi e virgolette attorno ai valori
+        
+        # Gestione di tag_1 per area e id_area
+        if key == 'tag_1':
+            if ':' in value:  # Verifica se il valore contiene 'id:area'
+                id_value, area = value.split(':', 1)
+                obj[key] = {'id_area': id_value, 'area': area}
+            else:
+                obj[key] = {'area': value}  # Caso di fallback se non c'è ':'
+        
+        # Gestione di tag_2 per id e category
+        elif key == 'tag_2':
+            if ':' in value:  # Verifica se il valore contiene 'id:category'
+                id_value, category = value.split(':', 1)
+                obj[key] = {'id': id_value, 'category': category}
+            else:
+                obj[key] = {'category': value}  # Caso di fallback se non c'è ':'
+        
+        # Gestione di tag_3, tag_4, o tag_5 per id e sub_category
+        elif key in ['tag_3', 'tag_4', 'tag_5']:
+            if ':' in value:  # Verifica se il valore contiene 'id:sub_category'
+                id_value, sub_category = value.split(':', 1)
+                obj[key] = {'id': id_value, 'sub_category': sub_category}
+            else:
+                obj[key] = {'sub_category': value}  # Caso di fallback se non c'è ':'
+        
+        else:
+            obj[key] = value  # Aggiungi la coppia key-value per altri tag normalmente
+    
+    return obj
+
+def process_tags_old1(stringa):
+    # Dividi la stringa per '&' per ottenere le coppie chiave=valore
+    pairs = stringa.split('&')
+    obj = {}
 
     for pair in pairs:
         key, value = pair.split('=')
