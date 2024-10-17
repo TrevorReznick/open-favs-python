@@ -4,7 +4,7 @@ from openai import AzureOpenAI, BadRequestError
 import get_site_info as get_site_info, url_control, get_info
 from load_json import main_cat, sub_cat, area_categories
 from utils import parse_string_to_dict, process_tags
-from prompts.prompts import create_summarize_prompt, last_classify_agent
+from prompts.prompts import create_summarize_prompt, new_summarize_prompt, last_classify_agent
 #import my_redis.test
 
 class Config:
@@ -135,7 +135,7 @@ def main(args):
         print('debug html content found: ', url_utils.get_html_content())
         print('debug soup results: ', extractor.get_html_content())   
 
-    my_prompt = create_summarize_prompt(name, title, description, html_content)
+    my_prompt = new_summarize_prompt(name, title, description, html_content)
 
     summarize = AI.asks_ai(my_prompt, Config.ROLE)
     #print(summarize)
